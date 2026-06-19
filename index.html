@@ -1,1095 +1,131 @@
 <!DOCTYPE html>
-<html lang="th"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLANB Image Library</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap');
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f4f7fb;--s1:#ffffff;--s2:#f8fafd;--s3:#edf2f9;
-  --bd:#e2eaf4;--bd2:#cdd9ed;
-  --acc:#2563eb;--acc2:#1d4ed8;--acc-lt:#eff6ff;--acc-pill:#dbeafe;
-  --green:#059669;--coral:#dc2626;--warn:#d97706;
-  --tx:#1e293b;--tx2:#64748b;--tx3:#b0bec5;
-  --fn:'Sarabun',sans-serif;--mo:'Nunito',sans-serif;
-  --r:14px;--r2:18px;--r3:999px;
-  --shadow:0 1px 4px rgba(30,41,59,.07);
-  --shadow-md:0 6px 20px rgba(30,41,59,.1);
-  --shadow-card:0 2px 8px rgba(37,99,235,.07);
-}
-html,body{height:100%;font-family:var(--fn);background:var(--bg);color:var(--tx)}
-body{display:flex;flex-direction:column;overflow:hidden}
-
-/* ── NAV ── */
-nav{background:linear-gradient(135deg,#1d4ed8 0%,#2563eb 100%);height:58px;display:flex;align-items:center;padding:0 1.5rem;gap:.875rem;flex-shrink:0;z-index:100;box-shadow:0 3px 12px rgba(29,78,216,.3)}
-.logo{font-family:var(--mo);font-size:14px;font-weight:700;color:#fff;letter-spacing:.04em;margin-right:auto;display:flex;align-items:center;gap:10px}
-.logo-dot{width:8px;height:8px;border-radius:50%;background:#93c5fd;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.logo small{color:rgba(255,255,255,.5);font-weight:400;font-size:12px}
-.db-pill{font-family:var(--mo);font-size:11px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:var(--r3);padding:4px 12px;font-weight:600}
-.dl-app-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:var(--r3);font-size:12px;font-weight:600;font-family:var(--mo);color:#fff;cursor:pointer;transition:.2s}
-.dl-app-btn:hover{background:rgba(255,255,255,.28)}
-.dl-app-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-
-/* ── LAYOUT ── */
-.app{flex:1;display:flex;overflow:hidden}
-aside{width:268px;min-width:268px;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden}
-
-/* ── SIDEBAR ── */
-.sb-head{padding:1.1rem 1.1rem .9rem;border-bottom:1px solid var(--bd)}
-.sb-lbl{font-size:10px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.14em;margin-bottom:.6rem;font-weight:700}
-.sb-search{width:100%;background:var(--s2);border:1.5px solid var(--bd);border-radius:var(--r3);padding:9px 14px;font-size:13px;font-family:var(--fn);color:var(--tx);outline:none;transition:.2s}
-.sb-search:focus{border-color:var(--acc);background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-.sb-search::placeholder{color:var(--tx3)}
-.sb-filters{padding:.75rem 1.1rem;border-bottom:1px solid var(--bd);display:flex;flex-direction:column;gap:8px;background:var(--s2)}
-.fsel{width:100%;background:#fff;border:1.5px solid var(--bd);border-radius:var(--r3);padding:8px 12px;font-size:12.5px;font-family:var(--fn);color:var(--tx);outline:none;cursor:pointer;transition:.2s;font-weight:500}
-.fsel:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-.fsel option{background:#fff;color:var(--tx)}
-.clr-btn{align-self:flex-end;font-size:11.5px;color:var(--coral);background:none;border:none;cursor:pointer;font-family:var(--fn);padding:3px 8px;border-radius:var(--r3);font-weight:600}
-.clr-btn:hover{background:#fef2f2}
-.sb-stat{padding:.5rem 1.1rem;font-size:11px;font-family:var(--mo);color:var(--tx3);border-bottom:1px solid var(--bd);flex-shrink:0;background:var(--s2)}
-.sb-stat b{color:var(--acc);font-weight:700}
-.tree{flex:1;overflow-y:auto;padding:.6rem 0;background:var(--s1)}
-.tree::-webkit-scrollbar{width:3px}
-.tree::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
-.tyr{font-size:11px;font-weight:700;font-family:var(--mo);color:var(--acc2);padding:6px 1.1rem;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none;text-transform:uppercase;letter-spacing:.08em}
-.tyr:hover{background:var(--acc-lt)}
-.tcam{font-size:12px;color:var(--tx2);padding:5px 1.1rem 5px 1.9rem;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none;font-weight:600}
-.tcam:hover{background:var(--s3)}
-.tbr{font-size:12px;color:var(--tx3);padding:4px 1.1rem 4px 2.8rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.15s;border-radius:0 var(--r3) var(--r3) 0;margin-right:.5rem}
-.tbr:hover{color:var(--tx);background:var(--acc-lt)}
-.tbr.on{color:var(--acc);background:var(--acc-pill);font-weight:600}
-.tbr .dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
-.tbr .cnt{margin-left:auto;font-family:var(--mo);font-size:10px;background:var(--s3);color:var(--tx3);padding:2px 7px;border-radius:var(--r3);font-weight:600}
-.caret{font-size:9px;color:var(--tx3);transition:.2s;flex-shrink:0;display:inline-block}
-.exp>.caret{transform:rotate(90deg)}
-
-/* ── MAIN ── */
-main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
-.toolbar{background:var(--s1);border-bottom:1px solid var(--bd);padding:.7rem 1.5rem;display:flex;align-items:center;gap:.875rem;flex-shrink:0;box-shadow:var(--shadow)}
-.breadcrumb{font-size:12.5px;font-family:var(--mo);color:var(--tx3);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-.breadcrumb span{color:var(--acc)}
-.vbtns{display:flex;gap:5px}
-.vbtn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bd);background:#fff;border-radius:10px;cursor:pointer;color:var(--tx3);transition:.18s}
-.vbtn:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-lt)}
-.vbtn.on{border-color:var(--acc);color:var(--acc);background:var(--acc-pill)}
-.vbtn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-
-/* ── GALLERY ── */
-.gallery-wrap{flex:1;overflow-y:auto;padding:1.5rem}
-.gallery-wrap::-webkit-scrollbar{width:5px}
-.gallery-wrap::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-.grid.sm{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-.grid.lg{grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
-.card{background:var(--s1);border:1.5px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.2s;animation:fadeUp .22s ease both;box-shadow:var(--shadow-card)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.card:hover{border-color:var(--acc);transform:translateY(-4px);box-shadow:0 10px 28px rgba(37,99,235,.18)}
-.card img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--s3);display:block}
-.card-body{padding:10px 13px;background:#fff}
-.card-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px;color:var(--tx)}
-.card-tags{display:flex;gap:4px;flex-wrap:wrap}
-.tag{font-size:10px;font-family:var(--mo);font-weight:700;padding:3px 9px;border-radius:var(--r3);white-space:nowrap}
-.ty{background:#dbeafe;color:#1d4ed8}
-.tc{background:#dcfce7;color:#15803d}
-.tb{background:#ede9fe;color:#6d28d9}
-.listv{display:flex;flex-direction:column;gap:7px}
-.lcard{display:flex;align-items:center;gap:14px;padding:11px 16px;background:var(--s1);border:1.5px solid var(--bd);border-radius:var(--r);cursor:pointer;transition:.18s;animation:fadeUp .22s ease both;box-shadow:var(--shadow-card)}
-.lcard:hover{border-color:var(--acc);box-shadow:0 6px 16px rgba(37,99,235,.13)}
-.lcard img{width:64px;height:48px;object-fit:cover;border-radius:10px;flex-shrink:0;background:var(--s3)}
-.linfo{flex:1;min-width:0}
-.lname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px;color:var(--tx)}
-.ltags{display:flex;gap:4px;flex-wrap:wrap}
-.lpath{font-size:10px;font-family:var(--mo);color:var(--tx3);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-/* ── EMPTY STATE ── */
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:14px;color:var(--tx3);text-align:center;padding:3rem}
-.empty-state svg{width:56px;height:56px;stroke:var(--acc);fill:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;opacity:.25}
-.empty-state h3{font-size:16px;color:var(--tx2);font-weight:600}
-.empty-state p{font-size:13px;line-height:1.8;max-width:280px}
-.go-btn{margin-top:.5rem;padding:11px 26px;background:var(--acc);color:#fff;border:none;border-radius:var(--r3);font-size:13.5px;font-weight:700;font-family:var(--fn);cursor:pointer;transition:.2s;box-shadow:0 4px 14px rgba(37,99,235,.3)}
-.go-btn:hover{background:var(--acc2);transform:translateY(-1px)}
-
-/* ── FAB ── */
-.fab{position:fixed;bottom:1.75rem;right:1.75rem;padding:0 20px 0 15px;height:50px;border-radius:var(--r3);background:var(--acc);border:none;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(37,99,235,.45);transition:.22s;z-index:700;font-size:13.5px;font-weight:700;font-family:var(--fn);color:#fff}
-.fab:hover{transform:translateY(-2px) scale(1.03);background:var(--acc2);box-shadow:0 8px 28px rgba(37,99,235,.4)}
-.fab svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-
-/* ── MODALS ── */
-.ov{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:900;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px)}
-.ov.on{display:flex}
-@keyframes popIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
-.add-box{background:#fff;border:1px solid var(--bd);border-radius:var(--r2);width:100%;max-width:490px;max-height:92vh;overflow-y:auto;position:relative;animation:popIn .2s ease;padding:2rem;box-shadow:var(--shadow-md)}
-.add-box::-webkit-scrollbar{width:4px}
-.add-box::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
-.add-box h2{font-size:16px;font-weight:700;margin-bottom:.35rem;display:flex;align-items:center;gap:8px;color:var(--tx)}
-.add-box .badge{font-size:10px;font-family:var(--mo);padding:3px 10px;border-radius:var(--r3);background:var(--acc-pill);color:var(--acc);font-weight:700;border:1px solid #bfdbfe}
-.add-box .subtitle{font-size:12.5px;color:var(--tx3);margin-bottom:1.4rem;line-height:1.6}
-.mclose{position:absolute;top:1.1rem;right:1.1rem;width:32px;height:32px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r3);cursor:pointer;color:var(--tx3);font-size:14px;display:flex;align-items:center;justify-content:center;transition:.18s}
-.mclose:hover{color:var(--coral);background:#fef2f2;border-color:#fca5a5}
-
-/* ── FOLDER ZONE ── */
-.folder-zone{border:2px dashed var(--bd2);border-radius:var(--r);padding:2.25rem 1.5rem;text-align:center;transition:.2s;position:relative;background:var(--s2);cursor:pointer;margin-bottom:1.1rem}
-.folder-zone:hover,.folder-zone.dg{border-color:var(--acc);background:var(--acc-lt)}
-.folder-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.fz-icon{font-size:40px;margin-bottom:.6rem}
-.fz-title{font-size:14px;font-weight:600;margin-bottom:.3rem;color:var(--tx)}
-.fz-sub{font-size:12px;color:var(--tx3);line-height:1.7}
-.fz-sub strong{color:var(--acc);font-weight:700}
-.detected{background:#f0fdf4;border:1px solid #86efac;border-radius:var(--r);padding:12px 16px;margin-bottom:1.1rem;display:none}
-.detected-row{display:flex;align-items:baseline;gap:8px;font-size:12.5px;margin-bottom:4px}
-.detected-row:last-child{margin-bottom:0}
-.detected-row label{font-family:var(--mo);font-size:10px;color:var(--tx3);width:72px;flex-shrink:0;text-transform:uppercase;font-weight:700}
-.detected-row span{color:var(--green);font-weight:700;word-break:break-all}
-.detected-row .cnt{margin-left:auto;font-family:var(--mo);font-size:10px;color:var(--tx3);flex-shrink:0}
-.prev-strip{display:flex;gap:6px;overflow-x:auto;margin-bottom:1.1rem;padding-bottom:2px}
-.prev-strip::-webkit-scrollbar{height:3px}
-.prev-strip::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
-.prev-thumb{width:56px;height:44px;object-fit:cover;border-radius:10px;flex-shrink:0;background:var(--s3);border:1.5px solid var(--bd)}
-
-/* ── FORM ── */
-.fg{margin-bottom:1.1rem}
-.fg label{display:block;font-size:11px;font-family:var(--mo);color:var(--tx2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;font-weight:700}
-.fg input{width:100%;background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);padding:11px 14px;font-size:15px;font-family:var(--mo);color:var(--tx);outline:none;transition:.2s;font-weight:600}
-.fg input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-.fg small{display:block;font-size:11px;color:var(--tx3);margin-top:6px;line-height:1.6}
-.brand-pick-row{background:var(--s2);border:1.5px solid var(--bd);border-radius:var(--r);padding:.85rem .9rem;margin-bottom:.6rem}
-.brand-pick-row label{display:block;font-size:12px;font-weight:600;color:var(--tx);text-transform:none;letter-spacing:0;margin-bottom:8px;font-family:var(--fn)}
-#brand-pickers{max-height:260px;overflow-y:auto;margin-bottom:1.1rem;padding-right:2px}
-#brand-pickers::-webkit-scrollbar{width:4px}
-#brand-pickers::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
-.prog-wrap{background:var(--s3);border-radius:var(--r3);height:7px;overflow:hidden;margin-bottom:.6rem;display:none}
-.prog-bar{height:100%;background:linear-gradient(90deg,var(--acc),#60a5fa);border-radius:var(--r3);width:0;transition:width .15s}
-.prog-label{font-size:12px;font-family:var(--mo);color:var(--tx3);margin-bottom:.7rem;display:none;text-align:center;font-weight:600}
-.sbtn{width:100%;padding:13px;background:var(--acc);color:#fff;border:none;border-radius:var(--r3);font-size:14.5px;font-weight:700;font-family:var(--fn);cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(37,99,235,.3)}
-.sbtn:hover{background:var(--acc2);transform:translateY(-1px)}
-.sbtn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.sbtn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-
-/* ── IMAGE MODAL ── */
-.img-box{background:#fff;border:1px solid var(--bd);border-radius:var(--r2);max-width:700px;width:100%;max-height:92vh;overflow-y:auto;position:relative;animation:popIn .2s ease;box-shadow:var(--shadow-md)}
-.img-box::-webkit-scrollbar{width:4px}
-.img-box::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
-.mimg{width:100%;display:block;max-height:440px;object-fit:contain;background:var(--s3);border-radius:var(--r2) var(--r2) 0 0}
-.minfo{padding:1.4rem 1.6rem 1.6rem}
-.minfo h2{font-size:16px;font-weight:700;margin-bottom:.85rem;color:var(--tx)}
-.mtags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.1rem}
-.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:1.1rem}
-.mrow{background:var(--s2);border-radius:var(--r);padding:11px 14px;border:1px solid var(--bd)}
-.mrow label{display:block;font-size:9.5px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px;font-weight:700}
-.mrow span{font-size:13.5px;font-weight:600;color:var(--tx)}
-.path-box{background:var(--acc-lt);border:1px solid #bfdbfe;border-radius:var(--r);padding:13px 16px;margin-bottom:1.1rem}
-.path-box label{font-size:9.5px;font-family:var(--mo);color:var(--acc);text-transform:uppercase;letter-spacing:.12em;display:block;margin-bottom:9px;font-weight:700}
-.path-tree{font-size:12px;font-family:var(--mo);line-height:2.4;color:var(--tx3)}
-.p-yr{color:var(--acc2);font-weight:700}.p-ca{color:#15803d;font-weight:700}.p-br{color:#6d28d9;font-weight:700}.p-fi{color:var(--tx2)}
-.mbtn{display:flex;gap:9px}
-.mbtn button{flex:1;padding:10px;border-radius:var(--r3);font-size:12.5px;font-family:var(--fn);font-weight:600;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--tx2);transition:.18s;display:flex;align-items:center;justify-content:center;gap:7px}
-.mbtn button:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-lt)}
-.mbtn button svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.del-btn:hover{border-color:var(--coral)!important;color:var(--coral)!important;background:#fef2f2!important}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:11px 18px;border-radius:var(--r3);font-size:13.5px;font-weight:600;font-family:var(--fn);z-index:9999;transform:translateY(64px);opacity:0;transition:.25s;pointer-events:none;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow-md)}
-.toast.on{transform:none;opacity:1}
-.toast.ok{background:#059669;color:#fff}
-.toast.err{background:var(--coral);color:#fff}
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
-
-/* ── SELECT MODE ── */
-.card{position:relative}
-.lcard{position:relative}
-.sel-chk{position:absolute;top:8px;left:8px;width:24px;height:24px;border-radius:8px;border:2px solid #fff;background:rgba(255,255,255,.5);box-shadow:0 1px 4px rgba(0,0,0,.2);display:none;align-items:center;justify-content:center;z-index:2;transition:.15s}
-.lcard .sel-chk{position:static;margin-right:4px;flex-shrink:0}
-.selecting .sel-chk{display:flex}
-.card.selected,.lcard.selected{outline:3px solid var(--acc);outline-offset:0}
-.card.selected .sel-chk,.lcard.selected .sel-chk{background:var(--acc);border-color:var(--acc)}
-.sel-chk svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0}
-.card.selected .sel-chk svg,.lcard.selected .sel-chk svg{opacity:1}
-.selecting .card,.selecting .lcard{cursor:pointer}
-
-.sel-bar{position:fixed;bottom:1.75rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--tx);color:#fff;border-radius:var(--r3);padding:10px 12px 10px 20px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-md);z-index:800;opacity:0;transition:.25s;font-size:13.5px;font-weight:600}
-.sel-bar.on{transform:translateX(-50%) translateY(0);opacity:1}
-.sel-bar b{color:#93c5fd}
-.sel-bar .sb-actions{display:flex;gap:8px}
-.sel-bar button{display:flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:var(--r3);font-size:13px;font-weight:700;font-family:var(--fn);cursor:pointer;transition:.15s}
-.sel-bar button svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
-.sb-dl{background:var(--acc);color:#fff}
-.sb-dl:hover{background:#3b75f0}
-.sb-del{background:rgba(220,38,38,.15);color:#fca5a5}
-.sb-del:hover{background:rgba(220,38,38,.3)}
-.sb-cancel{background:rgba(255,255,255,.12);color:#fff}
-.sb-cancel:hover{background:rgba(255,255,255,.22)}
-.vbtn.sel-on{border-color:var(--acc);color:var(--acc);background:var(--acc-pill)}
-</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLANB / Image Library</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Helvetica Neue', Arial, sans-serif; }
+        body { margin: 0; background-color: #f8fafc; color: #334155; display: flex; flex-direction: column; height: 100vh; }
+        .navbar { background-color: #1e40af; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .logo { font-weight: bold; font-size: 18px; display: flex; align-items: center; gap: 5px; }
+        .logo span { font-weight: normal; opacity: 0.7; }
+        .nav-right { display: flex; gap: 10px; align-items: center; }
+        .main-container { display: flex; flex: 1; overflow: hidden; }
+        .sidebar { width: 260px; background: white; border-right: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .search-box input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
+        .filter-select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; font-size: 14px; }
+        .content { flex: 1; padding: 25px; overflow-y: auto; }
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .content-title { font-size: 18px; font-weight: 600; color: #1e293b; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .image-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: transform 0.2s; }
+        .image-card:hover { transform: translateY(-4px); }
+        .image-wrapper { width: 100%; height: 150px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        .image-info { padding: 12px; font-size: 13px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+        .btn { padding: 8px 16px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-outline { background: white; border: 1px solid #cbd5e1; color: #475569; }
+        .btn-outline:hover { background: #f8fafc; }
+        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; color: #64748b; }
+        .empty-icon { font-size: 48px; margin-bottom: 15px; opacity: 0.5; }
+    </style>
+    <script src="https://accounts.google.com/gsi/client" onload="initClient()" async defer></script>
 </head>
 <body>
 
-<nav>
-  <div class="logo"><div class="logo-dot"></div>PLANB <small>/ Image Library</small></div>
-  <span class="db-pill" id="db-pill">8 รูป</span>
-  <button class="dl-app-btn" onclick="deleteAll()" title="ลบรูปทั้งหมด" style="background:rgba(220,38,38,.25);border-color:rgba(220,38,38,.4)">
-    <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path></svg>
-    ลบทั้งหมด
-  </button>
-  <button class="dl-app-btn" onclick="downloadApp()" title="ดาวน์โหลด App ไฟล์ HTML นี้">
-    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-    Download App
-  </button>
-</nav>
-
-<div class="app">
-  <aside>
-    <div class="sb-head">
-      <div class="sb-lbl">ค้นหา</div>
-      <input class="sb-search" id="q" placeholder="ชื่อรูป, แบรนด์, campaign..." oninput="doSearch()">
-    </div>
-    <div class="sb-filters">
-      <select class="fsel" id="fy" onchange="doSearch()"><option value="">ทุกปี</option><option value="2026">2026</option></select>
-      <select class="fsel" id="fc" onchange="doSearch()"><option value="">ทุก Campaign</option><option value="15-05-2026">15-05-2026</option><option value="16-05-2026">16-05-2026</option></select>
-      <select class="fsel" id="fb" onchange="doSearch()"><option value="">ทุกแบรนด์</option><option value="AD_06.Fanclub_Noeul Birthday 16 May 26 2D_30sec_Thanyalak">AD_06.Fanclub_Noeul Birthday 16 May 26 2D_30sec_Thanyalak</option><option value="AD_101.McDonalds_Zeed Festival 15 May 26 2D_15sec_OMD">AD_101.McDonalds_Zeed Festival 15 May 26 2D_15sec_OMD</option></select>
-      <button class="clr-btn" onclick="clearF()">✕ ล้างตัวกรอง</button>
-    </div>
-    <div class="sb-stat" id="sb-stat">พบ <b>8</b> / 8 รูป</div>
-    <div class="tree" id="tree"><div class="tyr exp" onclick="toggleNode(this)"><span class="caret">▶</span>📅 2026</div><div><div class="tcam exp" onclick="toggleNode(this)"><span class="caret">▶</span>📁 15-05-2026</div><div><div class="tbr" onclick="treeFilter('2026','15-05-2026','AD_101.McDonalds_Zeed Festival 15 May 26 2D_15sec_OMD',this)"><span class="dot"></span>AD_101.McDonalds_Zeed Festival 15 May 26 2D_15sec_OMD<span class="cnt">4</span></div></div><div class="tcam exp" onclick="toggleNode(this)"><span class="caret">▶</span>📁 16-05-2026</div><div><div class="tbr" onclick="treeFilter('2026','16-05-2026','AD_06.Fanclub_Noeul Birthday 16 May 26 2D_30sec_Thanyalak',this)"><span class="dot"></span>AD_06.Fanclub_Noeul Birthday 16 May 26 2D_30sec_Thanyalak<span class="cnt">4</span></div></div></div></div>
-  </aside>
-
-  <main>
-    <div class="toolbar">
-      <div class="breadcrumb" id="bc">ทั้งหมด</div>
-      <div class="vbtns">
-        <button class="vbtn" id="vsel" onclick="toggleSelectMode()" title="เลือกหลายรูป">
-          <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
-        </button>
-        <button class="vbtn on" id="vg" onclick="setView('grid',this)" title="Grid">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
-        </button>
-        <button class="vbtn" id="vsm" onclick="setView('sm',this)" title="Grid เล็ก">
-          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="4.5" height="4.5" rx=".8"></rect><rect x="9.75" y="2" width="4.5" height="4.5" rx=".8"></rect><rect x="17.5" y="2" width="4.5" height="4.5" rx=".8"></rect><rect x="2" y="9.75" width="4.5" height="4.5" rx=".8"></rect><rect x="9.75" y="9.75" width="4.5" height="4.5" rx=".8"></rect><rect x="17.5" y="9.75" width="4.5" height="4.5" rx=".8"></rect><rect x="2" y="17.5" width="4.5" height="4.5" rx=".8"></rect><rect x="9.75" y="17.5" width="4.5" height="4.5" rx=".8"></rect><rect x="17.5" y="17.5" width="4.5" height="4.5" rx=".8"></rect></svg>
-        </button>
-        <button class="vbtn" id="vl" onclick="setView('list',this)" title="List">
-          <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1.5" fill="currentColor" stroke="none"></circle><circle cx="3" cy="12" r="1.5" fill="currentColor" stroke="none"></circle><circle cx="3" cy="18" r="1.5" fill="currentColor" stroke="none"></circle></svg>
-        </button>
-      </div>
-    </div>
-    <div class="gallery-wrap"><div id="gallery"><div class="grid "><div class="card" onclick="openImg('mq955nkz8vcl')">
-    <img src="blob:null/7ce73979-0f41-4426-93de-cd0f2d0a4a85" alt="Siam-E Poster Horizontal (1).jpg" loading="lazy">
-    <div class="card-body">
-      <div class="card-name">Siam-E Poster Horizontal (1).jpg</div>
-      <div class="card-tags">
-        <span class="tag ty">2026</span>
-        <span class="tag tc">16-05-2026</span>
-        <span class="tag tb">AD_06.Fanclub_Noeul Birthday 16 May 26 2D_30sec_Thanyalak</span>
-      </div>
-    </div>
-  </div><div class="card" onclick="openImg('mq955nl0rmtd')">
-    <img src="blob:null/69215dfb-29ef-4896-8b40-b512c0eac555" alt="Siam-E Poster Horizontal (2).jpg" loading="lazy">
-    <div class="card-body">
-      <div class="card-name">Siam-E Poster Horizontal (2).jpg</div>
-      <div class="card-tags">
-        <span class="tag ty">2026</span>
-        <span class="tag tc">16-05-2026</span>
-        <span class="tag tb">AD_06.Fanclub_Noeul Birthday 16 May 26 2D_30sec_Thanyalak</span>
-      </div>
-    </div>
-  </div><div class="card" onclick="openImg('mq955nl0ebwh')">
-    <img src="blob:null/3e31032f-1e0c-46d8-a5a2-2ca88b5ea0db" alt="Siam-E Poster Horizontal (3).jpg" loading="lazy">
-    <div class="card-body">
-      <div class="card-name">Siam-E Poster Horizontal (3).jpg</div>
-      <div class="card-tags">
-        <span class="tag ty">2026</span>
-        <span class="tag tc">16-05-2026</span>
-        <span class="tag tb">AD_06.Fanclub_Noeul Birthday 16 May 26 2D_30sec_Thanyalak</span>
-      </div>
-    </div>
-  </div><div class="card" onclick="openImg('mq955nl0572t')">
-    <img src="blob:null/50add486-fcc2-43ed-8520-dbb305fc91f1" alt="Siam-E Poster Horizontal (4).jpg" loading="lazy">
-    <div class="card-body">
-      <div class="card-name">Siam-E Poster Horizontal (4).jpg</div>
-      <div class="card-tags">
-        <span class="tag ty">2026</span>
-        <span class="tag tc">16-05-2026</span>
-        <span class="tag tb">AD_06.Fanclub_Noeul Birthday 16 May 26 2D_30sec_Thanyalak</span>
-      </div>
-    </div>
-  </div><div class="card" onclick="openImg('mq955nl1v500')">
-    <img src="blob:null/ed2b7adf-9b9c-4c3e-89ad-c4bb47616355" alt="Siam-E Poster Horizontal (1).jpg" loading="lazy">
-    <div class="card-body">
-      <div class="card-name">Siam-E Poster Horizontal (1).jpg</div>
-      <div class="card-tags">
-        <span class="tag ty">2026</span>
-        <span class="tag tc">15-05-2026</span>
-        <span class="tag tb">AD_101.McDonalds_Zeed Festival 15 May 26 2D_15sec_OMD</span>
-      </div>
-    </div>
-  </div><div class="card" onclick="openImg('mq955nl1otbc')">
-    <img src="blob:null/cd84c464-0f5b-4339-ba6f-c32033a84bc9" alt="Siam-E Poster Horizontal (2).jpg" loading="lazy">
-    <div class="card-body">
-      <div class="card-name">Siam-E Poster Horizontal (2).jpg</div>
-      <div class="card-tags">
-        <span class="tag ty">2026</span>
-        <span class="tag tc">15-05-2026</span>
-        <span class="tag tb">AD_101.McDonalds_Zeed Festival 15 May 26 2D_15sec_OMD</span>
-      </div>
-    </div>
-  </div><div class="card" onclick="openImg('mq955nl13ljk')">
-    <img src="blob:null/d76784c4-0d4c-40cd-abe3-4214bf1013ef" alt="Siam-E Poster Horizontal (3).jpg" loading="lazy">
-    <div class="card-body">
-      <div class="card-name">Siam-E Poster Horizontal (3).jpg</div>
-      <div class="card-tags">
-        <span class="tag ty">2026</span>
-        <span class="tag tc">15-05-2026</span>
-        <span class="tag tb">AD_101.McDonalds_Zeed Festival 15 May 26 2D_15sec_OMD</span>
-      </div>
-    </div>
-  </div><div class="card" onclick="openImg('mq955nl1qs6z')">
-    <img src="blob:null/2df26214-ebc3-4fb9-8410-cf0be1f04b5c" alt="Siam-E Poster Horizontal (4).jpg" loading="lazy">
-    <div class="card-body">
-      <div class="card-name">Siam-E Poster Horizontal (4).jpg</div>
-      <div class="card-tags">
-        <span class="tag ty">2026</span>
-        <span class="tag tc">15-05-2026</span>
-        <span class="tag tb">AD_101.McDonalds_Zeed Festival 15 May 26 2D_15sec_OMD</span>
-      </div>
-    </div>
-  </div></div></div></div>
-  </main>
-</div>
-
-<button class="fab" onclick="showAdd()">
-  <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
-  นำเข้า Folder
-</button>
-
-<!-- ADD MODAL -->
-<div class="ov" id="add-ov" onclick="closeAddOv(event)">
-  <div class="add-box">
-    <button class="mclose" onclick="hideAdd()">✕</button>
-    <h2>นำเข้า Folder รูปภาพ <span class="badge">+ ADD</span></h2>
-    <div class="subtitle">ระบบจะเก็บชื่อ Folder ทุกชั้นเป็น Campaign Path อัตโนมัติ — ส่วน Brand ให้เลือกจากรายชื่อ (จาก Raw Data)</div>
-
-    <div class="folder-zone" id="fzone">
-      <input type="file" id="folder-input" webkitdirectory="" multiple="" onchange="onFolderPick(this)">
-      <div class="fz-icon">📁</div>
-      <div class="fz-title">คลิกเพื่อเลือก Folder</div>
-      <div class="fz-sub">รองรับ <strong>JPG · PNG · WEBP · GIF</strong></div>
+    <div class="navbar">
+        <div class="logo">● PLANB <span>/ Image Library</span></div>
+        <div class="nav-right">
+            <button id="authBtn" class="btn btn-outline" onclick="handleAuthClick()">🔑 เชื่อมต่อ Google Drive</button>
+        </div>
     </div>
 
-    <div class="detected" id="detected" style="display: none;">
-      <div class="detected-row"><label>📁 Folder</label><span id="det-folder">Stock Photo Digital</span><span class="cnt" id="det-count">8 รูป</span></div>
-      <div class="detected-row"><label>Sub-folder</label><span id="det-cam">2 folders ย่อย</span></div>
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="search-box">
+                <input type="text" placeholder="ค้นหา ชื่อรูป, แบรนด์, campaign...">
+            </div>
+            <select class="filter-select"><option>ทุกปี</option></select>
+            <select class="filter-select"><option>ทุก Campaign</option></select>
+            <select class="filter-select"><option>ทุกแบรนด์</option></select>
+        </div>
+
+        <div class="content">
+            <div class="content-header">
+                <div class="content-title" id="folderTitle">คลังรูปภาพทั้งหมด</div>
+            </div>
+            <div id="mainDisplay">
+                <div class="empty-state">
+                    <div class="empty-icon">📁</div>
+                    <h3>ยังไม่ได้เชื่อมต่อข้อมูล</h3>
+                    <p>กรุณากดปุ่ม "เชื่อมต่อ Google Drive" ด้านบน เพื่อดึงรูปภาพจากไดรฟ์ของคุณ</p>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="prev-strip" id="prev-strip" style="display: none;"></div>
-
-    <div id="meta-section" style="display: none;">
-      <div class="fg">
-        <label>ปี (Year) *</label>
-        <input type="number" id="m-yr" value="2026" min="2020" max="2099">
-        <small>ชื่อ Folder ทุกชั้นจะถูกเก็บไว้เป็น Campaign Path อัตโนมัติ — เลือก Brand ด้านล่างให้แต่ละกลุ่ม</small>
-      </div>
-      <div id="brand-pickers"></div>
-      <div class="prog-label" id="prog-label" style="display: none;">กำลังนำเข้า... 8 / 8</div>
-      <div class="prog-wrap" id="prog-wrap" style="display: none;"><div class="prog-bar" id="prog-bar" style="width: 0px;"></div></div>
-      <button class="sbtn" id="imp-btn" onclick="doImport()">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-        นำเข้า <span id="imp-lbl">(8 รูป)</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- IMAGE MODAL -->
-<div class="ov" id="img-ov" onclick="closeImgOv(event)">
-  <div class="img-box">
-    <button class="mclose" onclick="closeImg()">✕</button>
-    <img class="mimg" id="mi" src="" alt="">
-    <div class="minfo">
-      <h2 id="mn"></h2>
-      <div class="mtags" id="mt"></div>
-      <div class="mgrid" id="mm"></div>
-      <div class="path-box">
-        <label>📂 ที่มาของรูป — Folder Path</label>
-        <div class="path-tree" id="mp"></div>
-      </div>
-      <div class="mbtn">
-        <button onclick="dlCur()">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          ดาวน์โหลด
-        </button>
-        <button onclick="editBrandCur()">
-          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4z"></path></svg>
-          แก้ Brand
-        </button>
-        <button class="del-btn" onclick="delCur()">
-          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
-          ลบรูปนี้
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- BULK BRAND MODAL -->
-<div class="ov" id="bulk-brand-ov" onclick="if(event.target.id==='bulk-brand-ov')closeBulkBrand()">
-  <div class="add-box" style="max-width:380px;padding:1.75rem">
-    <button class="mclose" onclick="closeBulkBrand()">✕</button>
-    <h2>แก้ Brand แบบหลายรูป</h2>
-    <div class="subtitle" id="bulk-brand-sub">เลือก Brand ใหม่สำหรับรูปที่เลือกไว้</div>
-    <div class="fg">
-      <label>Brand</label>
-      <select id="bulk-brand-sel" class="fsel" style="width:100%;padding:11px 14px;font-size:14px"></select>
-    </div>
-    <button class="sbtn" onclick="applyBulkBrand()">บันทึก</button>
-  </div>
-</div>
-
-<div class="toast ok" id="toast">
-  <svg viewBox="0 0 24 24" id="t-icon" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6L9 17l-5-5"></path></svg>
-  <span id="t-msg">นำเข้าสำเร็จ 8 รูป ⚡</span>
-</div>
-
-<div class="sel-bar" id="selbar">
-  <span><b id="selcount">0</b> รูปที่เลือก</span>
-  <div class="sb-actions">
-    <button class="sb-dl" onclick="downloadSelected()">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      ดาวน์โหลด
-    </button>
-    <button class="sb-dl" style="background:#7c3aed" onclick="bulkBrandPrompt()">
-      <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4z"/></svg>
-      แก้ Brand
-    </button>
-    <button class="sb-del" onclick="deleteSelected()">
-      <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-      ลบ
-    </button>
-    <button class="sb-cancel" onclick="toggleSelectMode()">ยกเลิก</button>
-  </div>
-</div>
 
 <script>
-const IMG_EXT=/\.(jpe?g|png|webp|gif|bmp|avif)$/i;
-const BRAND_LIST=["137 degrees", "2B ABLE", "4 M MULTIMEDIA", "7Up", "A Money", "A.Menarini", "AAS Porsche", "ABeam Consulting", "Adda", "Adidas", "Aeon", "Aeronautical Radio of Thailand", "Aesla", "Aestec Pharma", "After You", "AIA", "Aioi Insurance", "Aion Automobile (EV)", "Air Asia", "Air Canada", "AIS", "Ajinomoto", "Alcon Contact Lenses", "Alibaba Cloud", "Alinamin Ex Plus", "Alipay", "Allianz Ayudhya", "AM International", "Amarin TV", "Amaze Super App", "Amazing Thailand", "Amazing Thailand GO Tour", "Amazing Thailand Local Goods &", "Amazon.com", "Amnuay Silpa School", "AMT Skincare", "Amway", "Ananda Property", "Anessa", "AP HONDA", "AP Property", "AP Tourism", "Arabus", "Arak Animal Hospital", "ASA EXPO", "Asia Concierge Travel", "ASICS (Jaspal Group)", "Asoke Skin Hospital", "Asset Wise", "Atiere", "Attack", "AUDEMARS PIGUET", "Aukey", "Auntie Anne's", "Aura BKK Clinic", "Aura Clinic", "Auswelllife", "AUTO1", "Avatr", "B-Quik", "Baansuay", "Balenciaga", "Bangchak Petroleum", "Bangkok Airways", "Bangkok Central Clinic", "Bangkok Gems", "Bangkok Gems & Jewelry Fair", "Bangkok Hospital", "Bangkok Hospital Sanamchan", "Bangkok Insurance", "Bangkok Life Assurance", "Bangkok Mass Transit Authority", "Bangkok Music City", "Bank for Agriculture", "Banobagi", "Bar B Q Plaza", "Bare live", "BBL", "BBSmartCar", "Bear Brand UHT", "Beautrium", "Beijing Zhuhe", "Benice", "Bennett", "Bepanthen", "Berocca", "Betadine (iNova)", "Betagen", "Betagro", "Bhaesaj", "Bhumjaithai Party", "Bibigo", "Bio-Woman", "BioActive+", "Biore", "Birdy", "Bissin", "Bitec Buri", "BK Studio", "Blackmores", "BlueScope", "BMHH", "BMN", "BMN Event", "BMW", "BONUS SUKI", "Boomtoon", "Boonrawd", "Boonthavorn", "Boots", "Boss Coffee", "Botanica Luxury Villa", "BOTTEGA VENETA", "Boucheron", "Bowers & Wilkins", "BP Castrol", "Brand's", "Breeze", "British Council", "Brother Printer", "BSC Cosmetic", "bTaskee", "BTL Medical Technologies", "BTS", "BTSG-MIX", "Buddy Dean Coffee", "BUENO Y BARATO", "BUFFETMEDIAPLUS", "BunBun", "Buoola", "Burberry", "Burger King", "Buriram United", "Buzz Pet Food", "BVK", "Bvlgari", "BYD (EV)", "Byredo", "C-Vitt", "Cabal Red", "Cadbury", "Cafe Amazon", "Calvin Klein", "Canva", "Capcom", "Captain Coating", "Carabao Dang", "Carebeau", "Carrier", "Case Club", "Casio", "Cat n joy", "CCOO", "Cebu Pacific Air", "CELINE", "Cellox", "Central", "Centrum", "CeraVe", "Cetaphil", "Cha Jing", "ChaCha", "Chanel", "Chang", "Changan Automobile (EV)", "Channel one", "Chanthaburi Gastronomy", "Chao Sua", "Chaophaya Hospital", "Chery Thailand", "Chiangmai Event", "Chimdoo", "China Airlines", "China Culture", "Chloé (Coty)", "Chonburi Event", "Chow Tai Fook", "Christian Dior", "Chubb Life Insurance", "Chubb Samaggi", "CIMB Bank", "Citizen", "CKA Beauty", "Cle de Peau", "Clear", "Clear nose", "Clearasoft", "Close Up", "Coca Cola Thailand", "Coffee Dreamy", "Coke", "Collaju", "Com7", "COMIC SQUARE", "Commart Thailand", "Compassion in World Farming", "Concert Wuan Bian", "Contango Event", "Content Shifu", "Copacabana Group", "Copperwired", "COSMIC", "Counterpain", "Coway", "CP All", "CP Foton", "CPF", "CPN", "CPS CHAPS", "Creative Economy Agency", "Cremo", "Crocs", "CRPAO", "Crunchyroll", "Cute Press", "D2I", "Daikin", "Dairy Queen", "Dazzle Me", "DD Property", "De Hygienique", "De Leaf Thanaka", "Decolgen", "Deedo", "Definisse Filler", "Deksomboon", "Democrat Party", "Denla Rama V School", "Density", "Department of Land Transport", "Dermaster", "Dermedy", "Destination Asia", "Destination Management Service", "Dhakul Chan Travel", "Difflam", "Disney Plus", "DITP", "DLT (Digital)", "DLT_Billboard", "Dna soy milk", "Do Home", "DOE", "Doi Kham", "Dolce & Gabbana", "Domino's Pizza", "Dorco", "Dove", "Downy", "Dr. Pong", "Dr.G", "Dr.Vii Clinic", "Dream Express (DEX)", "Dulwich College Bangkok", "Dunlop Tire", "Dunlopillo", "Dusit Central Park", "Dutch Mill", "Dutchie", "Dynasty Tiletop", "Dyson", "e.p.t.q filler", "Easy Money", "Eazy Car", "Eclipse", "Economic Party", "EGAT", "Elis", "EM DISTRICT", "Embassy of India", "Eminent Air", "Entrée", "Epson", "Erawan Hop Inn", "Ergo Insurance", "Est", "Estee Lauder", "ETC", "Eucerin", "Euro Cake", "European", "EVA AIRLINES", "Eveandboy", "Event", "Event - Friday", "Event - Kiatpetch Amarin Sun", "Event - Monday Event", "Event - PYD True Thu", "Event - RWS", "Event - Sing Mawin Mon", "Event - Sor Sommai JKN Wed", "Event - Tuesday Event", "Exim Bank", "EXOTIC VOYAGE", "F426", "FAB FOOD", "Fabel Entertainment", "Fanclub", "Fanta", "Farger", "Fashion Island", "FaThai", "FB battery", "FDA", "Fendi", "Festival of Dance and Music", "Fineline", "Fitwhey", "Five Star Movies", "Five Star Production", "Foot Locker (MAP Active)", "Ford", "Frasers Property", "FRED", "Free & Free", "Friskies", "FSL Optotech", "Fuji Film", "Fusion Solutions", "Futsal Thailand League", "Future Mobility Thailand", "FWD Insurance", "G-Dragon World Tour", "G-YU", "Galderma", "Galong", "Game FPS x", "Garena", "Garnier", "Gaszym", "GDH", "Geely (EV)", "Genda Chill", "Generali Insurance", "Giffarine", "Gillette", "Giorgio Armani", "Glico Pocky", "Glico Pretz", "GMM", "GO Wholesale", "GO! Hotel", "Golden Billion Express", "GOLDEN STAR", "Goodmate", "Google Cloud", "GOOJODOQ", "GoonkGink", "Government Housing Bank", "GPO", "Grab", "Grand Nikko Bangkok Sathorn", "Grand Sport", "Green bio", "Green Yellow", "GS battery", "GSB", "Guangxi Culture and Tourism", "Gucci", "Guizhou Travel", "GWM (EV)", "Gyproc", "Hada Labo", "Haier", "Hajiko", "Halls", "HAMA-SUSHI", "Hand Brand", "Hankook", "Happy Noz", "Harley Davidson (MGC)", "Hatari", "Havaianas", "HBO MAX", "HD TOUR", "Head & Shoulders", "Hello Bangkok LED", "Her Hyness", "Herbal Essences", "Hermes", "Hershey's", "HEXA-CERAM", "Hi-Kool", "HI-SHIELD", "Hivestack Inc", "Hoe Hin Pak Fah Yeow", "Hoka", "Home Pro", "Homm Kesa", "Honda", "Honda LPGA Thailand", "Hongqi", "Honkai", "Honor", "House and Condo Show", "HP", "Hua Chiew Hospital", "Huachiew Chalermprakiet University", "Huawei", "Hugo Boss", "Human Intelligence", "Hy!", "Hygiene", "Hyundai (EV)", "I-Herb", "ible", "Ichitan", "Idda", "if fruitamin", "Ikea", "IMF", "IMPACT", "in2it", "Inaba-Ciao", "Indiba", "Indomie", "Indus Siam", "Industrial Estate Authority of Thailand", "Infinity Medical Clinic", "Infinix", "Informa Markets", "Ingon", "INGU", "INSEE", "International Community School Udon Thani (ICS)", "inZ Hospital", "IODERM", "iPhone", "iQIYI", "Issey Miyake Perfume", "Isuzu", "J-Lek", "Jack'n Jill", "Jam Soap", "Jean Paul Gaultier (PUIG)", "Jindamanee", "Job DB", "Job Expo Thailand", "Johnnie Walker", "Johnson & Johnson", "Joji Secret young", "Joma", "Journal", "JSP Pharma", "JTB", "JTEKT", "Juvelook&Lenisna", "JWD Logistic", "JY Vacation", "K Bank", "K Day", "KA Cream", "KAI Grooming", "Kai Yang", "Kamillosan M", "Kanebo", "Kaniva Pet Food", "Kaohoon", "Karmarts", "Kashjoy", "Kato (KUMA)", "Kawintra Clinic", "Kelly and Co's", "KEX Express", "KFC", "Khana Bukkhon Chomrom Thamngan", "Khaoshong", "Kimpton Maa-Lai", "Kimpton Maa-Lai (Siam Sindhorn)", "King Of Auto Product", "King Power", "King Power Mahanakhon", "King Rice Bran Oil", "King Square Development", "Kintone", "Kitkat", "KKUIC", "Kleenex", "Kluaynamthai Hospital", "KMB Hospital", "Knorr", "Koala's March", "Kobayashi Healthcare", "Kobe Steakhouse", "Kodomo", "Koh Kae", "Kolbadent", "Konami", "Konvy", "Koriko", "Krating Daeng", "Krungsri", "Krungsri Auto", "Krungthai AXA", "KTB", "KTC", "Kubota", "KUMA", "L'OR Capsaule", "L'Oreal", "La Mer", "La Roche Posey", "La'dor", "Lab X", "LABOTTE BKK", "Lactasoy", "Lake Legend", "Lalamove", "Land & House", "Land For Loan", "Lao Ge", "Lay's", "Lazada", "LBC Clinic", "Le Ah", "Leela Oil", "Lego", "Lenovo", "Lenso Wheel", "LEO", "Levi's", "Lezhin App", "LG", "LH Bank", "Liberator", "Life", "Line", "Line BK", "LINE MAN", "Lion", "Lipovitan-d", "Lipton Ice Tea", "Live Nation Tero", "Loacker", "LOBO", "LOEWE", "Lolane", "Long Krung Discovery", "Longines", "Longtunman", "Lootbox Hero", "LOPIA", "Lorinase", "Lottery plus", "Lotus", "Lotus Home Design", "Lotus's", "Lotus's Smart App", "LOUIS VUITTON", "LTMH", "Lucky Flame", "Lucky Suki", "Lux", "LVMH", "Lyn", "LYO", "M Vision Event", "M-150", "M-cin", "M-FLOW", "MADCATTOS", "Maeboonlam", "Maggi", "Maharashtra Tourism", "Maison KEEPS", "Major Cineplex", "Makro", "Malee", "MAMA", "Mansome", "Mardi Care", "Marithe", "Marketing Oops! Summit", "Masis", "Master Card", "Master card", "Masterpiece Hospital", "MAVINN FIGHT", "Max Hair International", "Maxion Game", "Maybelline", "Mazda", "MBK Center", "MBK Square", "McDonald's", "Me-O", "MedConsult Clinic", "MEDIA ASIA", "Media Point", "Mediheal", "Mediheal (L&P Cosmetic)", "Mega Show Bangkok", "Mega we care", "Meiji", "Meitetsu World", "Mentholatum", "Mentos", "Mercedes Benz (EV)", "Merz Aesthetics", "Meta", "Methycobal", "Metropolitan Electricity Authority", "MEX", "MG", "MGC-Asia", "MHESI", "MICE MAGNET ASIA", "Michelin", "Mido", "Mihoyo", "Mikku", "Milo", "Minere", "Mini Cooper", "Miniso", "Ministry of Commerce", "Mirinda", "MIS International School", "Mistine", "MITH Bangkok", "Mitr", "Mitsubishi", "Mitsubishi Electric", "Mitsubishi Heavy Duty", "Mixue", "Mizumi", "MK", "Moccona", "Modhaus", "Molten", "Mom Choice", "Monchou", "Money Expo", "Monkey shoulder", "MONO Max", "Mooyo Yaowapha", "Morakot", "Mores Develop", "Moschino", "Motor show", "Moution", "Moveme Hero", "MR.D.I.Y.", "MSD", "Muan-Der-Land", "Muang Thai Life Assurance", "Muangthai Insurance", "Muek Groob", "Muin BKK", "Muji", "Mundo Nomada Travel", "Music Festival EDC Thailand", "Muzik Move", "Nabota", "Nac Long", "Namjim Kunnid", "Nan Silver And Textile Festival", "Nara Thai cuisine", "Naraya", "Narciso Rodriguez", "Naree", "Nars", "Nation TV", "National Institute of Development Administration", "National Savings Fund", "Nature's Way Thailand", "NC MEDIA", "NCC Exhibition Event", "Neat", "Nectapharma", "Neo Corporate", "Nescafe", "Nescafe Mixes", "Nescafe Red Cup", "Nespresso", "Nestle", "Nestle Pure Life", "Netflix", "Netmarble", "Neuramis", "Neutrogena", "New Balance (Map Active)", "Ngernhaijai", "Ngerntidlor", "Nguan Soon", "NH Hua Hin", "NHK", "Nissan", "Nissin", "Nitori", "Nivea", "Noble Property", "Nonthaburi Technical School Alumni Association", "Nonthavej Hospital", "Nothing", "Nsport", "NT Broadband", "NTK", "Nu Formula", "Nutriwell", "OBEC", "OCEANMAN Thailand", "Odoo", "Office of Provincial Commercial Affairs Chiangrai", "Office Of Provincial Commercial Affairs Roiet", "Office of The Election Commission of Thailand", "Oishi", "Olay", "OLIGIO", "Omazz", "OMEGA", "Omoda (EV)", "One Bangkok", "ONE OR EIGHT", "Onitsuka Tiger", "Onitsuka Tiger (Fashion e-Commerce Asia)", "OPPO", "Optima Aesthetics", "Oreo", "Ori", "Oriental Princess", "OSMEP", "Osotspa", "Other", "Otooth", "Owndays", "P.O Care", "Panasonic", "Pandora", "Panpuri", "Pantene", "Pao", "Pao Win Wash", "Parle", "Parrot", "Pastel", "Patum Vegetable Oil", "PEA", "People's Party", "Pepsi", "Perfect", "Persona Entertainment", "PharYaNak Herbal Drink", "Pheu Thai Party", "Philips", "Phyathai Hospital", "Pirelli", "PISEN TECH", "Piyabutsuksakorn School", "Piyavate Hospital", "Pizza Hut", "Plan B eleven", "PM Center", "Pokemon Card", "Polarboll", "Pond's", "Pop Mart", "Power Mall", "Poy Sian", "PPTV", "Prada", "PRAMY", "Praram 9 Hospital", "Principal Asset", "Profhilo", "Promise", "Promise Shampoo", "ProPak Asia", "Propak Asia 2026", "Property Perfect", "Protex", "Provamed", "Provincial Commercial Office", "Prudential", "Pruksa Real Estate and Property", "PSUSP", "PTG Energy", "PTT OR", "PUBG Mobile", "Pulzar", "Pumpui", "Punthai Coffee", "Puriku", "PwC", "PWP Thailand", "Qmin-C", "Rabbit Card", "Rabbit Card - Corp.", "Rabbit Care", "Rabbit Life", "Rabbit Rewards", "Rado", "Ragnarok", "Ragnarok Landverse", "Ralph Lauren", "Ramkhamhaeng University", "Ray's Ban", "Razer", "Ready", "Red Bull", "Refinitiv Asia", "Rei Sugar", "Reignwood Park", "Rejuran", "Revolax", "Rexona", "Ricoh", "Ricola", "Riddara (EV)", "RIMOWA", "Rinnai", "Rintip (New Biodiesel)", "Riverpro", "Robinson", "Roctec", "Rojukiss", "Rolex (S.A.B.)", "Roojai", "Rosdee", "Rosy Doedian", "Royal-D", "S Spine And Nerve Hospital", "S-26", "S.Khonkaen", "S2O Music Festival", "SACIT", "SAFE Fertility Group", "Sahamongkolfilm", "SAHAPAT", "Saint Laurent", "Saky", "SALANA", "Salmonphone", "Salz", "SAM", "Samitivej Hospital", "Samsonite", "Samsung", "Samsung Life Insurance", "Sandro", "Sansiri", "Santas", "Sap Mueang Movie", "Sappe", "Satur", "Saucony", "SC Asset", "SCB", "Scenario", "SCG Experience", "SCG Smart Board", "Scholl", "Scotch", "Scotch Brite", "Scott Tissue", "Scrubb Orchestra", "Sea Game", "Sea Life Bangkok Ocean World", "Sealy", "Seiko", "Selsun", "Senka", "SENMA", "Sensodyne", "SET", "Sewa", "SFX Cinema", "Shanghai Disneyland", "Sharp (Thai City Electric)", "Shell", "Shenzhen Tourism", "SHIELD AI", "SHIMA Park", "Shingrix", "Shiseido", "Shizuoka", "Shokubutsu", "Shopee", "Shopee Food", "Siam Paragon Retail", "Siam Piwat", "Siam Premium Outlets", "Siamsmile Insurance", "Signature MD", "Silver Wolf", "Singha", "Singha Estate", "SIOLIM ADVENTURES", "Siriwellness", "SISB Schools", "SISOD", "Sista", "Sixt (MGC)", "Skechers", "Skin Editor", "SKY", "SL Global Entertainment", "SLC Clinic", "Slip To Sleep", "SM Town Live", "Smart Heart", "SME Business Connect", "Smeg", "Smooth E", "Smooto", "Snailwhite", "Snake Brand Cooling Power", "Snickers", "Social Security Office", "Somwang Ngern Sang Dai", "Sony", "Sony Music", "Sony Picture", "Sony Picture (UIP)", "SOS Children", "Southern Innovation and Technology Expo (Site 2026)", "Sponge Crunch", "Sponsor", "Sponsor Pack", "Sport Inter Media Group", "SPORTFIVE", "Sports Authority of Thailand", "Spotify", "Sprinkle", "Srichand", "St Andrews International School (Dusit)", "St Andrews International School (Ekkamai)", "STANDARD TOUR", "Star Aire", "Starbucks", "Sting", "Strepsils", "Stride", "Study in India Expo", "Sueitrong Construction", "Sukumvit Hospital", "Sunsilk", "Sunsu", "Supalai", "Supersport", "Suphap Osod (Flattwhite)", "Sutharos", "Swensens", "Swisse", "Synnex", "Synphaet Hospital", "Synphaet Nakhon Pathom Hospital", "Systema", "Tacobell", "Tag heuer (LVMH)", "Tagi", "Taiwan Trade Center", "Takeda", "Talon Tours", "Tang Gui Jub", "Tao Yeab Lok deodorant powder", "Taokaenoi Seaweed", "Tararom Estate", "Taro", "Tasto Potato Chips", "TAT", "TCL", "TEA PLUS", "Tempra", "TGFONE", "Thai Airways", "Thai Coco", "Thai Health Promotion Foundation", "Thai Kao Mai Party", "Thai Life Insurance", "Thai Lion Air", "Thai Nakorn Patana", "Thai PBS", "Thai Sang Thai Party", "Thai Smile Bus", "Thai Watsadu", "THAIFEX - HOREC Asia", "Thaihealth Resource Center", "Thailand Post", "Thailand Super Series", "Thailand Toy Expo", "Thaimart", "Thairath online", "Thairath TV", "Thaivivat Insurance", "Thammasat University", "Thanachart Insurance", "THANN", "The American School of Bangkok", "The Forestias", "The Goldgreen", "The Klinique", "The Mall", "The Nature", "The One Plus", "The Ordinary", "The Ozone", "The Pizza Company", "The River Hotel", "The Riviera Palm Beach", "The Singleton", "THE STANDARD", "The Thai Chamber of Commerce", "The Undertaker 2", "The University of the Thai Chamber of Commerce", "The Walt Disney", "Three Lady Cooks", "Ticket Agent", "Tiffany & Co", "Tiger Balm", "Tigerplast", "TikTok Application", "Tiktok Shop", "Tim Hortons", "Tipco", "TOA", "Tod's", "Tom Ford", "TOPS", "TORO", "Toshiba", "TOT", "Tourism Authority of Thailand", "Tourism Malaysia", "Tourism of Queensland", "Toyota", "Tpartner", "TPC", "TPN CONNECT", "Tra Samor", "Traveloka", "Travstore Travel Management", "Trip.com", "True money", "True Online", "True Visions", "True Visions Now", "TrueMove", "Tsubaki", "Tudor", "Tueyhom", "Twin Lotus", "Twistko", "Tylenol", "TyreXpo Asia Bangkok", "U.S. Embassy", "UBM Asia Event", "UD Town", "UIP", "Under Armour", "UNESCO Creative Cities", "Unilever", "Unionpay", "Uniqlo", "Universal Music", "USA Nortwest Cherries", "Useful Food", "Usmile", "V&P", "Vacheron Constantin", "VAGABOND TOURS", "Valvoline", "Vaseline", "VERTEX Thailand", "Veta", "VFcore", "Vgadz", "VGI", "Vimut Hospital", "Viriyah Insurance", "Visa", "Vit A Day", "VIU", "Viva Everyday", "VIVO", "Vixol", "VOCO Bangkok Surawong", "Vogue eyewear", "Volvo", "Wacoal", "Wai Wai", "Wall Magnum", "Wandeedee", "Wangprom Herb", "Warner Brothers", "Warrix Shop", "Wash Xpress", "Wash&go", "Wat Klang Bang Phra", "Watson", "WBC Muaythai", "We TV", "Weber Sealant Products", "Webull Thailand", "Wegovy", "WENDY ASIA", "Where Wind Meet Game", "Whiskas", "Wind clinic", "Wingz", "Withat", "Workpoint Entertainment", "World Fair Event", "World Gas", "World of Coffee Bangkok", "WorldTravellers DMC Sdn Bhd", "Xiaomi", "Xpeng (EV)", "Yamaha", "yayoi", "Yiwugo", "Youkeshu", "Youku", "Youth Olympic Games", "Youtube", "YSL", "Yuasa Battery", "Yum Yum", "Yves Rocher", "Zhulian", "ZIPAIR"];
-let DB=JSON.parse(localStorage.getItem('plnb_v4')||'[]');
-let pending=[];
-let cur=null, viewMode='grid', lastResults=[];
-let selectMode=false, selected=new Set();
+    let tokenClient;
+    let accessToken = null;
 
-function toggleSelectMode(){
-  selectMode=!selectMode;
-  selected.clear();
-  document.getElementById('gallery').parentElement.classList.toggle('selecting',selectMode);
-  document.getElementById('vsel').classList.toggle('sel-on',selectMode);
-  updateSelBar();
-  renderGallery(lastResults);
-}
+    const CLIENT_ID = '869794522322-ccaii1t1jor7f55ilqnq2vb4hk5ioqil.apps.googleusercontent.com';
+    const SCOPES = 'https://www.googleapis.com/auth/drive.readonly'; 
 
-function cardClick(id,ev){
-  if(selectMode){
-    ev.stopPropagation();
-    if(selected.has(id)) selected.delete(id); else selected.add(id);
-    renderGallery(lastResults);
-    updateSelBar();
-  } else {
-    openImg(id);
-  }
-}
-
-function updateSelBar(){
-  const bar=document.getElementById('selbar');
-  document.getElementById('selcount').textContent=selected.size;
-  bar.classList.toggle('on', selectMode && selected.size>0);
-}
-
-async function downloadSelected(){
-  if(!selected.size) return;
-  const items=DB.filter(i=>selected.has(i.id));
-  if(items.length===1){
-    // ดาวน์โหลดไฟล์เดียวตรงๆ ไม่ต้อง zip
-    const it=items[0];
-    const blob=await idbGet(it.id);
-    const url=URL.createObjectURL(blob||await (await fetch(it.img)).blob());
-    const a=document.createElement('a'); a.href=url; a.download=it.name; a.click();
-    URL.revokeObjectURL(url);
-    toast('ดาวน์โหลด 1 รูป ✓');
-    return;
-  }
-  toast('กำลังบีบไฟล์ ZIP...');
-  const zip=new JSZip();
-  for(const it of items){
-    let blob=await idbGet(it.id);
-    if(!blob) blob=await (await fetch(it.img)).blob();
-    const path=`${it.year}/${it.fullPath||it.name}`;
-    zip.file(path, blob);
-  }
-  const content=await zip.generateAsync({type:'blob'});
-  const url=URL.createObjectURL(content);
-  const a=document.createElement('a'); a.href=url; a.download='PLANB_images.zip'; a.click();
-  URL.revokeObjectURL(url);
-  toast('ดาวน์โหลด '+items.length+' รูป ⚡');
-}
-
-async function deleteAll(){
-  if(!DB.length){ toast('ไม่มีรูปในระบบ','err'); return; }
-  if(!confirm('ลบรูปทั้งหมด '+DB.length+' รูป? ไม่สามารถย้อนกลับได้')) return;
-  for(const it of DB) idbDelete(it.id).catch(()=>{});
-  DB=[]; selected.clear();
-  save(); updateSelBar(); popFilters(); renderTree(); doSearch();
-  toast('ลบรูปทั้งหมดแล้ว');
-}
-
-async function deleteSelected(){
-  if(!selected.size) return;
-  if(!confirm('ลบ '+selected.size+' รูปที่เลือก?')) return;
-  for(const id of selected) idbDelete(id).catch(()=>{});
-  DB=DB.filter(i=>!selected.has(i.id));
-  selected.clear();
-  save(); updateSelBar(); popFilters(); renderTree(); doSearch();
-  toast('ลบรูปแล้ว');
-}
-
-// ─── IndexedDB: เก็บไฟล์รูปจริง (blob) ให้รอดทุก refresh ────────────────────
-const IDB_NAME='plnb_images', IDB_STORE='blobs';
-function idbOpen(){
-  return new Promise((res,rej)=>{
-    const req=indexedDB.open(IDB_NAME,1);
-    req.onupgradeneeded=()=>req.result.createObjectStore(IDB_STORE);
-    req.onsuccess=()=>res(req.result);
-    req.onerror=()=>rej(req.error);
-  });
-}
-async function idbPut(id,blob){
-  const db=await idbOpen();
-  return new Promise((res,rej)=>{
-    const tx=db.transaction(IDB_STORE,'readwrite');
-    tx.objectStore(IDB_STORE).put(blob,id);
-    tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error);
-  });
-}
-async function idbGet(id){
-  const db=await idbOpen();
-  return new Promise((res,rej)=>{
-    const tx=db.transaction(IDB_STORE,'readonly');
-    const r=tx.objectStore(IDB_STORE).get(id);
-    r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);
-  });
-}
-async function idbDelete(id){
-  const db=await idbOpen();
-  return new Promise((res,rej)=>{
-    const tx=db.transaction(IDB_STORE,'readwrite');
-    tx.objectStore(IDB_STORE).delete(id);
-    tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error);
-  });
-}
-
-function save(){
-  // เก็บแค่ metadata ลง localStorage (ไม่เก็บรูป — รูปอยู่ใน IndexedDB)
-  const meta=DB.map(({img,_objUrl,...rest})=>rest);
-  try{ localStorage.setItem('plnb_v4',JSON.stringify(meta)); }catch(e){ console.warn('localStorage full'); }
-}
-function saveMetaOnly(){ save(); }
-
-// โหลดรูปจาก IndexedDB กลับมาเป็น ObjectURL ตอนเปิดแอป
-async function loadImagesFromIDB(){
-  for(const item of DB){
-    try{
-      const blob=await idbGet(item.id);
-      if(blob){ item.img=URL.createObjectURL(blob); item._objUrl=true; }
-      else { item.img=''; }
-    }catch(e){ item.img=''; }
-  }
-}
-
-let toastT;
-function toast(msg,type='ok'){
-  clearTimeout(toastT);
-  const icons={ok:'<path d="M20 6L9 17l-5-5"/>',err:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'};
-  document.getElementById('t-icon').innerHTML=icons[type]||icons.ok;
-  document.getElementById('t-msg').textContent=msg;
-  const el=document.getElementById('toast');
-  el.className='toast on '+type;
-  toastT=setTimeout(()=>el.classList.remove('on'),3000);
-}
-
-function setView(v,btn){
-  viewMode=v;
-  document.querySelectorAll('.vbtn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  renderGallery(lastResults);
-}
-
-function showAdd(){ document.getElementById('add-ov').classList.add('on'); }
-function hideAdd(){ document.getElementById('add-ov').classList.remove('on'); resetAdd(); }
-function closeAddOv(e){ if(e.target.id==='add-ov') hideAdd(); }
-
-function resetAdd(){
-  pending=[];
-  pendingGroups=[];
-  document.getElementById('folder-input').value='';
-  document.getElementById('detected').style.display='none';
-  document.getElementById('prev-strip').style.display='none';
-  document.getElementById('prev-strip').innerHTML='';
-  document.getElementById('brand-pickers').innerHTML='';
-  document.getElementById('meta-section').style.display='none';
-  document.getElementById('prog-wrap').style.display='none';
-  document.getElementById('prog-label').style.display='none';
-  document.getElementById('prog-bar').style.width='0';
-  document.getElementById('imp-btn').disabled=false;
-  const fz=document.getElementById('fzone');
-  fz.querySelector('.fz-icon').textContent='📁';
-  fz.querySelector('.fz-title').textContent='คลิกเพื่อเลือก Folder';
-  fz.querySelector('.fz-sub').innerHTML='รองรับ <strong>JPG · PNG · WEBP · GIF</strong>';
-}
-
-let pendingGroups=[]; // [{key, folderParts:[...], folderLabel, files:[{file,relPath}], brand}]
-
-function onFolderPick(input){
-  const files=input.files||input;
-  const imgs=Array.from(files).filter(f=>IMG_EXT.test(f.name));
-  if(!imgs.length){ toast('ไม่พบรูปภาพใน Folder นี้','err'); return; }
-
-  // จับชื่อ Folder ทุกชั้น (เต็มเส้นทาง) ระหว่าง root กับไฟล์ ไม่ตัดเหลือแค่ 2-3 ชั้นสุดท้ายแบบเดิม
-  const groups={};
-  imgs.forEach(f=>{
-    const rp=f.webkitRelativePath||f.name;
-    const parts=rp.split('/');
-    // parts[0] = root folder ที่เลือก, parts[last] = ชื่อไฟล์, ระหว่างกลางทั้งหมด = ชั้น sub-folder ทุกชั้น
-    const folderParts=parts.slice(1,-1); // ทุกชั้นย่อยใต้ root จนถึงก่อนไฟล์
-    const key=folderParts.join('/')||'(root)';
-    if(!groups[key]) groups[key]={folderParts:folderParts.slice(),files:[]};
-    groups[key].files.push({file:f,relPath:rp});
-  });
-
-  pendingGroups=Object.keys(groups).map(key=>({
-    key,
-    folderParts:groups[key].folderParts,
-    folderLabel:groups[key].folderParts.length?groups[key].folderParts.join(' › '):'(ไม่มี sub-folder)',
-    files:groups[key].files,
-    brand:''
-  }));
-
-  const root=(imgs[0].webkitRelativePath||imgs[0].name).split('/')[0];
-  const gCount=pendingGroups.length;
-
-  document.getElementById('det-folder').textContent=root;
-  document.getElementById('det-count').textContent=imgs.length+' รูป';
-  document.getElementById('det-cam').textContent=gCount+' folder'+(gCount>1?'s':'')+' ย่อย';
-  document.getElementById('detected').style.display='block';
-
-  // thumbs
-  const strip=document.getElementById('prev-strip');
-  strip.innerHTML='';
-  imgs.slice(0,14).forEach(f=>{
-    const url=URL.createObjectURL(f);
-    const img=document.createElement('img');
-    img.className='prev-thumb'; img.src=url;
-    img.onload=()=>URL.revokeObjectURL(url);
-    strip.appendChild(img);
-  });
-  strip.style.display='flex';
-
-  renderBrandPickers();
-  document.getElementById('meta-section').style.display='block';
-  document.getElementById('imp-lbl').textContent='('+imgs.length+' รูป)';
-
-  const fz=document.getElementById('fzone');
-  fz.querySelector('.fz-icon').textContent='✅';
-  fz.querySelector('.fz-title').textContent='เลือกแล้ว: '+root;
-  fz.querySelector('.fz-sub').innerHTML='<strong style="color:var(--green)">'+imgs.length+' รูป</strong> พร้อมนำเข้า — คลิกเพื่อเปลี่ยน';
-}
-
-// ─── สร้าง dropdown เลือก Brand แยกตามแต่ละกลุ่ม sub-folder ───────────────────
-function brandOptionsHtml(selected){
-  let html='<option value="">— เลือก Brand —</option>';
-  BRAND_LIST.forEach(b=>{
-    html+=`<option value="${b.replace(/"/g,'&quot;')}"${b===selected?' selected':''}>${b}</option>`;
-  });
-  return html;
-}
-
-function renderBrandPickers(){
-  const wrap=document.getElementById('brand-pickers');
-  if(!wrap) return;
-  wrap.innerHTML=pendingGroups.map((g,idx)=>`
-    <div class="fg brand-pick-row">
-      <label>📁 ${g.folderLabel} <small style="text-transform:none;font-weight:500;color:var(--tx3)">(${g.files.length} รูป)</small></label>
-      <select class="fsel brand-select" data-idx="${idx}" onchange="setGroupBrand(${idx},this.value)" style="width:100%;padding:11px 14px;font-size:14px">
-        ${brandOptionsHtml(g.brand)}
-      </select>
-    </div>
-  `).join('');
-}
-
-function setGroupBrand(idx,val){
-  if(pendingGroups[idx]) pendingGroups[idx].brand=val;
-}
-
-async function doImport(){
-  const yr=document.getElementById('m-yr').value.trim();
-  if(!yr){ toast('กรุณาระบุปี','err'); return; }
-  if(!pendingGroups.length){ toast('กรุณาเลือก Folder ก่อน','err'); return; }
-
-  const missing=pendingGroups.filter(g=>!g.brand);
-  if(missing.length){ toast('กรุณาเลือก Brand ให้ครบทุก Folder ย่อย ('+missing.length+' กลุ่มยังไม่เลือก)','err'); return; }
-
-  // ประกอบ pending list แบบ flat จาก pendingGroups (เก็บ folderParts เต็มทุกชั้น + brand ที่เลือก)
-  pending=[];
-  pendingGroups.forEach(g=>{
-    g.files.forEach(({file,relPath})=>{
-      pending.push({
-        file, relPath,
-        folderParts:g.folderParts,
-        campaign:g.folderParts.length?g.folderParts.join(' › '):'(ไม่มี sub-folder)',
-        brand:g.brand
-      });
-    });
-  });
-
-  const btn=document.getElementById('imp-btn');
-  btn.disabled=true;
-  document.getElementById('prog-wrap').style.display='block';
-  document.getElementById('prog-label').style.display='block';
-  const total=pending.length; let done=0;
-
-  // เก็บไฟล์จริงลง IndexedDB (ถาวร) + ObjectURL สำหรับแสดงผลทันที
-  const BATCH=30;
-  for(let i=0;i<pending.length;i+=BATCH){
-    const slice=pending.slice(i,i+BATCH);
-    for(const item of slice){
-      const id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-      const objUrl=URL.createObjectURL(item.file);
-      await idbPut(id,item.file);
-      DB.push({
-        id, name:item.file.name, fullPath:item.relPath,
-        year:yr, campaign:item.campaign, folderParts:item.folderParts, brand:item.brand,
-        img:objUrl, at:new Date().toISOString(), _objUrl:true
-      });
-      done++;
-      document.getElementById('prog-bar').style.width=Math.round(done/total*100)+'%';
-      document.getElementById('prog-label').textContent='กำลังนำเข้า... '+done+' / '+total;
-    }
-    await new Promise(r=>setTimeout(r,0));
-  }
-  save();
-  toast('นำเข้าสำเร็จ '+total+' รูป ⚡');
-  hideAdd(); popFilters(); renderTree(); doSearch();
-}
-
-// ดึงชื่อ Folder ชั้นแรกสุด (top-level) เป็น Campaign — backward-compatible กับ data เก่า
-function topFolder(i){
-  if(Array.isArray(i.folderParts)&&i.folderParts.length) return i.folderParts[0];
-  // data เก่าที่ไม่มี folderParts: ดึงส่วนแรกจาก campaign string
-  const parts=(i.campaign||'').split(' › ');
-  return parts[0]||'(ไม่ระบุ)';
-}
-
-function popFilters(){
-  const yrs=[...new Set(DB.map(i=>i.year))].sort((a,b)=>b-a);
-  const cams=[...new Set(DB.map(i=>topFolder(i)))].sort();
-  const brs=[...new Set(DB.map(i=>i.brand))].sort();
-  const fy=document.getElementById('fy'),fc=document.getElementById('fc'),fb=document.getElementById('fb');
-  const [cy,cc,cb]=[fy.value,fc.value,fb.value];
-  fy.innerHTML='<option value="">ทุกปี</option>'+yrs.map(y=>`<option value="${escAttr(y)}">${escHtml(y)}</option>`).join('');
-  fc.innerHTML='<option value="">ทุก Campaign</option>'+cams.map(c=>`<option value="${escAttr(c)}">${escHtml(c)}</option>`).join('');
-  fb.innerHTML='<option value="">ทุกแบรนด์</option>'+brs.map(b=>`<option value="${escAttr(b)}">${escHtml(b)}</option>`).join('');
-  fy.value=cy; fc.value=cc; fb.value=cb;
-}
-
-function clearF(){
-  ['q','fy','fc','fb'].forEach(id=>document.getElementById(id).value='');
-  document.querySelectorAll('.tbr').forEach(b=>b.classList.remove('on'));
-  doSearch();
-}
-
-function escAttr(s){
-  return String(s).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
-}
-function escHtml(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function renderTree(){
-  const tree=document.getElementById('tree');
-  // โครงสร้าง: Year → Campaign (folderParts[0] เท่านั้น) → Brand → นับรูป
-  const map={};
-  DB.forEach(i=>{
-    const yr=i.year;
-    const cam=topFolder(i);
-    const br=i.brand||'(ไม่มี Brand)';
-    if(!map[yr])map[yr]={};
-    if(!map[yr][cam])map[yr][cam]={};
-    if(!map[yr][cam][br])map[yr][cam][br]=0;
-    map[yr][cam][br]++;
-  });
-  const years=Object.keys(map).sort((a,b)=>b-a);
-  if(!years.length){
-    tree.innerHTML='<div style="padding:1.25rem;font-size:11px;color:var(--tx3);text-align:center;line-height:1.8">ยังไม่มีข้อมูล<br>กด <strong style="color:var(--acc)">นำเข้า Folder</strong></div>';
-    return;
-  }
-  let html='';
-  years.forEach(yr=>{
-    html+=`<div class="tyr exp" onclick="toggleNode(this)"><span class="caret">▶</span>📅 ${escHtml(yr)}</div><div>`;
-    Object.keys(map[yr]).sort().forEach(cam=>{
-      const total=Object.values(map[yr][cam]).reduce((a,b)=>a+b,0);
-      html+=`<div class="tcam exp" onclick="toggleNode(this)"><span class="caret">▶</span>📁 ${escHtml(cam)}<span class="cnt">${total}</span></div><div>`;
-      Object.keys(map[yr][cam]).sort().forEach(br=>{
-        html+=`<div class="tbr" onclick="treeFilter('${escAttr(yr)}','${escAttr(cam)}','${escAttr(br)}',this)"><span class="dot"></span>🏷 ${escHtml(br)}<span class="cnt">${map[yr][cam][br]}</span></div>`;
-      });
-      html+='</div>';
-    });
-    html+='</div>';
-  });
-  tree.innerHTML=html;
-}
-
-function toggleNode(el){
-  const isExp=el.classList.contains('exp');
-  el.classList.toggle('exp',!isExp);
-  const next=el.nextElementSibling;
-  if(next) next.style.display=isExp?'none':'block';
-}
-
-function treeFilter(yr,cam,br,el){
-  document.querySelectorAll('.tbr').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('fy').value=yr;
-  document.getElementById('fc').value=cam;
-  document.getElementById('fb').value=br;
-  document.getElementById('q').value='';
-  doSearch();
-}
-
-function doSearch(){
-  const q=document.getElementById('q').value.toLowerCase().trim();
-  const fy=document.getElementById('fy').value;
-  const fc=document.getElementById('fc').value;
-  const fb=document.getElementById('fb').value;
-  lastResults=DB.filter(i=>{
-    const txt=[i.name,i.campaign,i.brand,i.fullPath||''].join(' ').toLowerCase();
-    return(!q||txt.includes(q))&&(!fy||i.year===fy)&&(!fc||topFolder(i)===fc)&&(!fb||i.brand===fb);
-  });
-  const parts=[];
-  if(fy)parts.push(`<span>${fy}</span>`);
-  if(fc)parts.push(`<span>${fc}</span>`);
-  if(fb)parts.push(`<span>${fb}</span>`);
-  if(q)parts.push(`<span>"${q}"</span>`);
-  document.getElementById('bc').innerHTML=parts.length?parts.join(' › '):'ทั้งหมด';
-  document.getElementById('sb-stat').innerHTML=DB.length?`พบ <b>${lastResults.length}</b> / ${DB.length} รูป`:'ยังไม่มีรูป';
-  document.getElementById('db-pill').textContent=DB.length+' รูป';
-  renderGallery(lastResults);
-}
-
-function renderGallery(items){
-  const g=document.getElementById('gallery');
-  if(!items.length){
-    g.innerHTML=`<div class="empty-state">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <h3>${DB.length?'ไม่พบรูปที่ค้นหา':'ยังไม่มีรูปในระบบ'}</h3>
-      <p>${DB.length?'ลองเปลี่ยน keyword หรือล้างตัวกรอง':'กดปุ่มด้านล่างเพื่อนำเข้า Folder รูปภาพ'}</p>
-      ${!DB.length?'<button class="go-btn" onclick="showAdd()">📂 นำเข้า Folder แรก</button>':''}
-    </div>`;
-    return;
-  }
-  if(viewMode==='list'){
-    g.innerHTML='<div class="listv">'+items.map(lcard).join('')+'</div>';
-  } else {
-    const cls=viewMode==='sm'?'sm':viewMode==='lg'?'lg':'';
-    g.innerHTML=`<div class="grid ${cls}">`+items.map(gcard).join('')+'</div>';
-  }
-}
-
-function gcard(i){
-  const sel=selected.has(i.id)?' selected':'';
-  return `<div class="card${sel}" onclick="cardClick('${i.id}',event)">
-    <div class="sel-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <img src="${i.img}" alt="${i.name}" loading="lazy">
-    <div class="card-body">
-      <div class="card-name">${i.name}</div>
-      <div class="card-tags">
-        <span class="tag ty">${i.year}</span>
-        <span class="tag tc">${i.campaign}</span>
-        <span class="tag tb">${i.brand}</span>
-      </div>
-    </div>
-  </div>`;
-}
-
-function lcard(i){
-  const sel=selected.has(i.id)?' selected':'';
-  return `<div class="lcard${sel}" onclick="cardClick('${i.id}',event)">
-    <div class="sel-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <img src="${i.img}" alt="${i.name}" loading="lazy">
-    <div class="linfo">
-      <div class="lname">${i.name}</div>
-      <div class="ltags">
-        <span class="tag ty">${i.year}</span>
-        <span class="tag tc">${i.campaign}</span>
-        <span class="tag tb">${i.brand}</span>
-      </div>
-      <div class="lpath">📂 ${i.year} › ${i.campaign} › 🏷 ${i.brand} › ${i.name}</div>
-    </div>
-  </div>`;
-}
-
-function openImg(id){
-  cur=DB.find(i=>i.id===id); if(!cur) return;
-  document.getElementById('mi').src=cur.img;
-  document.getElementById('mn').textContent=cur.name;
-  document.getElementById('mt').innerHTML=`<span class="tag ty">${cur.year}</span><span class="tag tc">${cur.campaign}</span><span class="tag tb">${cur.brand}</span>`;
-  document.getElementById('mm').innerHTML=
-    `<div class="mrow"><label>ปี</label><span>${cur.year}</span></div>
-     <div class="mrow"><label>Brand</label><span>${cur.brand}</span></div>
-     <div class="mrow" style="grid-column:1/-1"><label>Campaign Path</label><span>${cur.campaign}</span></div>`;
-  const fp=Array.isArray(cur.folderParts)&&cur.folderParts.length?cur.folderParts:[cur.campaign];
-  let indent='';
-  let pathHtml=`D:\\ <span class="p-yr">${cur.year}</span>\\<br>`;
-  fp.forEach(part=>{
-    indent+='&nbsp;&nbsp;';
-    pathHtml+=`${indent}└─ <span class="p-ca">${part}</span>\\<br>`;
-  });
-  indent+='&nbsp;&nbsp;';
-  pathHtml+=`${indent}└─ <span class="p-br">🏷 ${cur.brand}</span>\\<br>`;
-  indent+='&nbsp;&nbsp;';
-  pathHtml+=`${indent}└─ <span class="p-fi">${cur.name}</span>`;
-  document.getElementById('mp').innerHTML=pathHtml;
-  document.getElementById('img-ov').classList.add('on');
-}
-function closeImg(){ document.getElementById('img-ov').classList.remove('on'); }
-function closeImgOv(e){ if(e.target.id==='img-ov') closeImg(); }
-
-function dlCur(){
-  if(!cur)return;
-  const a=document.createElement('a');
-  a.href=cur.img; a.download=cur.name; a.click();
-  toast('ดาวน์โหลดแล้ว');
-}
-
-function editBrandCur(){
-  if(!cur)return;
-  const mm=document.getElementById('mm');
-  const opts=brandOptionsHtml(cur.brand);
-  mm.insertAdjacentHTML('beforeend',
-    `<div class="mrow" id="brand-edit-row" style="grid-column:1/-1">
-      <label>เปลี่ยน Brand</label>
-      <select id="brand-edit-sel" class="fsel" style="width:100%;padding:9px 12px;font-size:13.5px;margin-top:4px">${opts}</select>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="sbtn" style="padding:9px;font-size:12.5px" onclick="saveBrandEdit()">บันทึก</button>
-        <button class="sbtn" style="padding:9px;font-size:12.5px;background:var(--tx3)" onclick="document.getElementById('brand-edit-row').remove()">ยกเลิก</button>
-      </div>
-    </div>`);
-}
-
-function saveBrandEdit(){
-  if(!cur)return;
-  const val=document.getElementById('brand-edit-sel').value;
-  if(!val){ toast('กรุณาเลือก Brand','err'); return; }
-  cur.brand=val;
-  const idx=DB.findIndex(i=>i.id===cur.id);
-  if(idx>-1) DB[idx].brand=val;
-  save(); popFilters(); renderTree(); doSearch();
-  openImg(cur.id);
-  toast('อัปเดต Brand แล้ว ✓');
-}
-
-function bulkBrandPrompt(){
-  if(!selected.size){ toast('กรุณาเลือกรูปก่อน','err'); return; }
-  document.getElementById('bulk-brand-sub').textContent='เลือก Brand ใหม่สำหรับ '+selected.size+' รูปที่เลือกไว้';
-  document.getElementById('bulk-brand-sel').innerHTML=brandOptionsHtml('');
-  document.getElementById('bulk-brand-ov').classList.add('on');
-}
-function closeBulkBrand(){ document.getElementById('bulk-brand-ov').classList.remove('on'); }
-function applyBulkBrand(){
-  const val=document.getElementById('bulk-brand-sel').value;
-  if(!val){ toast('กรุณาเลือก Brand','err'); return; }
-  DB.forEach(i=>{ if(selected.has(i.id)) i.brand=val; });
-  save(); popFilters(); renderTree(); doSearch();
-  closeBulkBrand();
-  toast('อัปเดต Brand ให้ '+selected.size+' รูปแล้ว ✓');
-}
-
-function delCur(){
-  if(!cur)return;
-  if(!confirm('ลบ "'+cur.name+'" ?'))return;
-  idbDelete(cur.id).catch(()=>{});
-  DB=DB.filter(i=>i.id!==cur.id);
-  save(); closeImg(); popFilters(); renderTree(); doSearch();
-  toast('ลบรูปแล้ว');
-}
-
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeImg(); hideAdd(); closeBulkBrand(); } });
-
-// ─── Drag & Drop onto folder-zone ───────────────────────────────────────────
-(function(){
-  const fzone=document.getElementById('fzone');
-  ['dragenter','dragover'].forEach(ev=>fzone.addEventListener(ev,e=>{
-    e.preventDefault(); e.stopPropagation();
-    fzone.classList.add('dg');
-  }));
-  ['dragleave','dragend'].forEach(ev=>fzone.addEventListener(ev,e=>{
-    fzone.classList.remove('dg');
-  }));
-  fzone.addEventListener('drop',async e=>{
-    e.preventDefault(); e.stopPropagation();
-    fzone.classList.remove('dg');
-    const items=[...e.dataTransfer.items];
-    const files=[];
-    async function readEntry(entry,path){
-      if(entry.isFile){
-        await new Promise(res=>{
-          entry.file(f=>{
-            Object.defineProperty(f,'webkitRelativePath',{value:path+f.name,writable:false,configurable:true});
-            files.push(f); res();
-          });
+    function initClient() {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: CLIENT_ID,
+            scope: SCOPES,
+            callback: (tokenResponse) => {
+                if (tokenResponse.error !== undefined) throw (tokenResponse);
+                accessToken = tokenResponse.access_token;
+                document.getElementById('authBtn').innerText = "🔄 เปลี่ยนบัญชี Drive";
+                fetchImagesFromDrive();
+            },
         });
-      } else if(entry.isDirectory){
-        const reader=entry.createReader();
-        let results=[];
-        await new Promise(res=>{
-          (function read(){
-            reader.readEntries(async entries=>{
-              if(!entries.length){res();return;}
-              results=results.concat([...entries]);
-              read();
+    }
+
+    function handleAuthClick() {
+        tokenClient.requestAccessToken({prompt: 'consent'});
+    }
+
+    function fetchImagesFromDrive() {
+        document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">กำลังดึงข้อมูลรูปภาพจาก Google Drive...</div>';
+        
+        const query = encodeURIComponent("mimeType contains 'image/' and trashed = false");
+
+        fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name,thumbnailLink)&pageSize=100`, {
+            headers: { 'Authorization': `Bearer ${accessToken}` }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const files = data.files;
+            if (!files || files.length === 0) {
+                document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">📷 ไม่พบรูปภาพใน Google Drive ของคุณ</div>';
+                return;
+            }
+
+            let gridHtml = '<div class="grid-container">';
+            files.forEach(file => {
+                const imgSrc = file.thumbnailLink ? file.thumbnailLink.replace('=s220', '=s400') : 'https://via.placeholder.com/150';
+                gridHtml += `
+                    <div class="image-card">
+                        <div class="image-wrapper">
+                            <img src="${imgSrc}" alt="${file.name}" loading="lazy">
+                        </div>
+                        <div class="image-info" title="${file.name}">${file.name}</div>
+                    </div>
+                `;
             });
-          })();
+            gridHtml += '</div>';
+            
+            document.getElementById('mainDisplay').innerHTML = gridHtml;
+            document.getElementById('folderTitle').innerText = `คลังรูปภาพทั้งหมด (พบ ${files.length} รูป)`;
+        })
+        .catch(err => {
+            document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">❌ เกิดข้อผิดพลาดในการดึงข้อมูล</div>';
         });
-        for(const ent of results) await readEntry(ent,path+entry.name+'/');
-      }
     }
-    for(const item of items){
-      const entry=item.webkitGetAsEntry&&item.webkitGetAsEntry();
-      if(entry) await readEntry(entry,'');
-    }
-    const input=document.getElementById('folder-input');
-    // simulate file list via DataTransfer
-    const dt=new DataTransfer();
-    files.forEach(f=>dt.items.add(f));
-    try{ input.files=dt.files; }catch(e){}
-    onFolderPick({files});
-  });
-})();
-
-// ─── Download App (save this HTML file) ─────────────────────────────────────
-function downloadApp(){
-  const html=document.documentElement.outerHTML;
-  const blob=new Blob(['<!DOCTYPE html>\n'+html],{type:'text/html'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='PLANB_ImageLibrary.html';
-  a.click();
-  URL.revokeObjectURL(a.href);
-  toast('ดาวน์โหลด App แล้ว ✓');
-}
-
-loadImagesFromIDB().then(()=>{
-  popFilters(); renderTree(); doSearch();
-});
 </script>
-
-
-</body></html>
+</body>
+</html>
