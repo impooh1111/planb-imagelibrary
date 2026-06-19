@@ -69,9 +69,11 @@
     let tokenClient;
     let accessToken = null;
 
-    // Client ID ของคุณ
     const CLIENT_ID = '869794522322-ccaii1t1jor7f55ilqnq2vb4hk5ioqil.apps.googleusercontent.com';
     const SCOPES = 'https://www.googleapis.com/auth/drive.readonly'; 
+    
+    // ล็อก ID โฟลเดอร์ "Planb imagelibrary" ที่คุณส่งมา
+    const TARGET_FOLDER_ID = '1TPF1Pv_fFHfc1NbgnCsS4yCn2Xz1LQBI';
 
     function initClient() {
         tokenClient = google.accounts.oauth2.initTokenClient({
@@ -81,7 +83,7 @@
                 if (tokenResponse.error !== undefined) throw (tokenResponse);
                 accessToken = tokenResponse.access_token;
                 document.getElementById('authBtn').innerText = "🔄 เปลี่ยนบัญชี Drive";
-                fetchImagesFromDrive();
+                fetchImagesFromFolder(TARGET_FOLDER_ID);
             },
         });
     }
@@ -90,11 +92,12 @@
         tokenClient.requestAccessToken({prompt: 'consent'});
     }
 
-    function fetchImagesFromDrive() {
-        document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">กำลังดึงข้อมูลรูปภาพจาก Google Drive...</div>';
+    function fetchImagesFromFolder(folderId) {
+        document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">กำลังดึงข้อมูลรูปภาพจากโฟลเดอร์เฉพาะ...</div>';
         
-        // ค้นหาไฟล์ภาพทั้งหมดที่ไม่ได้ถูกลบใน Drive
-        const query = encodeURIComponent("mimeType contains 'image/' and trashed = false");
+        // ค้นหาเฉพาะรูปภาพที่อยู่ในโฟลเดอร์ที่กำหนด (รวมถึงในโฟลเดอร์ย่อย)
+        // เพื่อความแม่นยำ จะดึงไฟล์รูปภาพที่อยู่ในโฟลเดอร์นี้โดยตรง
+        const query = encodeURIComponent(`mimeType contains 'image/' and '${folderId}' in parents and trashed = false`);
 
         fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name,thumbnailLink)&pageSize=100`, {
             headers: { 'Authorization': `Bearer ${accessToken}` }
@@ -103,31 +106,69 @@
         .then(data => {
             const files = data.files;
             if (!files || files.length === 0) {
-                document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">📷 ไม่พบรูปภาพใน Google Drive ของคุณ</div>';
+                // หากไม่เจอรูปในโฟลเดอร์หลัก ลองค้นหาแบบหาโฟลเดอร์ย่อยข้างในก่อน
+                fetchSubFoldersAndImages(folderId);
                 return;
             }
-
-            let gridHtml = '<div class="grid-container">';
-            files.forEach(file => {
-                // ดึงรูป Thumbnail จาก Google Drive มาแสดงผล
-                const imgSrc = file.thumbnailLink ? file.thumbnailLink.replace('=s220', '=s400') : 'https://via.placeholder.com/150';
-                gridHtml += `
-                    <div class="image-card">
-                        <div class="image-wrapper">
-                            <img src="${imgSrc}" alt="${file.name}" loading="lazy">
-                        </div>
-                        <div class="image-info" title="${file.name}">${file.name}</div>
-                    </div>
-                `;
-            });
-            gridHtml += '</div>';
-            
-            document.getElementById('mainDisplay').innerHTML = gridHtml;
-            document.getElementById('folderTitle').innerText = `คลังรูปภาพทั้งหมด (พบ ${files.length} รูป)`;
+            displayGrid(files);
         })
         .catch(err => {
             document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">❌ เกิดข้อผิดพลาดในการดึงข้อมูล</div>';
         });
+    }
+
+    // ฟังก์ชันเพิ่มเติมสำหรับค้นหาในโฟลเดอร์ย่อย (เช่น โฟลเดอร์ Empire, MBK 2025)
+    function fetchSubFoldersAndImages(parentFolderId) {
+        const folderQuery = encodeURIComponent(`mimeType = 'application/vnd.google-apps.folder' and '${parentFolderId}' in parents and trashed = false`);
+        
+        fetch(`https://www.googleapis.com/drive/v3/files?q=${folderQuery}`, {
+            headers: { 'Authorization': `Bearer ${accessToken}` }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.files || data.files.length === 0) {
+                document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">📷 ไม่พบรูปภาพหรือโฟลเดอร์ย่อยในโฟลเดอร์นี้</div>';
+                return;
+            }
+            
+            // รวบรวม ID โฟลเดอร์ย่อยทั้งหมดมาหาไฟล์ภาพ
+            let condition = data.files.map(f => `'${f.id}' in parents`).join(' or ');
+            const imgQuery = encodeURIComponent(`mimeType contains 'image/' and (${condition}) and trashed = false`);
+            
+            return fetch(`https://www.googleapis.com/drive/v3/files?q=${imgQuery}&fields=files(id,name,thumbnailLink)&pageSize=100`, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
+            });
+        })
+        .then(res => res ? res.json() : null)
+        .then(data => {
+            if (!data || !data.files || data.files.length === 0) {
+                document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">📷 ไม่พบรูปภาพในโฟลเดอร์ย่อย</div>';
+                return;
+            }
+            displayGrid(data.files);
+        })
+        .catch(() => {
+            document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">❌ เกิดข้อผิดพลาดในการดึงข้อมูลโฟลเดอร์ย่อย</div>';
+        });
+    }
+
+    function displayGrid(files) {
+        let gridHtml = '<div class="grid-container">';
+        files.forEach(file => {
+            const imgSrc = file.thumbnailLink ? file.thumbnailLink.replace('=s220', '=s400') : 'https://via.placeholder.com/150';
+            gridHtml += `
+                <div class="image-card">
+                    <div class="image-wrapper">
+                        <img src="${imgSrc}" alt="${file.name}" loading="lazy">
+                    </div>
+                    <div class="image-info" title="${file.name}">${file.name}</div>
+                </div>
+            `;
+        });
+        gridHtml += '</div>';
+        
+        document.getElementById('mainDisplay').innerHTML = gridHtml;
+        document.getElementById('folderTitle').innerText = `คลังรูปภาพในโฟลเดอร์ (พบ ${files.length} รูป)`;
     }
 </script>
 </body>
