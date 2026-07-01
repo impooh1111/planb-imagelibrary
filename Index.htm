@@ -49,6 +49,9 @@
             <select class="filter-select" id="monthFilter" onchange="filterImages()">
                 <option value="">ทุกเดือน</option>
             </select>
+            <select class="filter-select" id="packageFilter" onchange="filterImages()">
+                <option value="">ทุก Package</option>
+            </select>
             <select class="filter-select" id="campaignFilter" onchange="filterImages()">
                 <option value="">ทุกสินค้า</option>
             </select>
@@ -119,6 +122,13 @@
         return { year, month };
     }
 
+    // แกะชื่อ Package จาก path (โฟลเดอร์ที่ขึ้นต้นด้วย "Pic Retouch @ ")
+    function extractPackage(pathStr) {
+        if (!pathStr) return null;
+        const m = pathStr.match(/Pic Retouch\s*@\s*([^\/]+)/i);
+        return m ? m[1].trim() : null;
+    }
+
     function loadImages() {
         fetch(APPS_SCRIPT_URL)
             .then(res => {
@@ -129,7 +139,8 @@
                 // คำนวณปี/เดือนให้แต่ละไฟล์จาก path
                 allFiles = data.map(f => {
                     const ym = extractYearMonth(f.path || f.campaign || '');
-                    return { ...f, year: ym.year, month: ym.month };
+                    const pkg = extractPackage(f.path || f.campaign || '');
+                    return { ...f, year: ym.year, month: ym.month, packageName: pkg };
                 });
                 populateFilters(allFiles);
                 displayGrid(allFiles);
@@ -161,6 +172,17 @@
             opt.value = m;
             opt.textContent = MONTH_LABEL_TH[m];
             monthSelect.appendChild(opt);
+        });
+
+        // Package
+        const packages = [...new Set(files.map(f => f.packageName).filter(Boolean))].sort();
+        const packageSelect = document.getElementById('packageFilter');
+        packageSelect.innerHTML = '<option value="">ทุก Package (' + packages.length + ')</option>';
+        packages.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p;
+            opt.textContent = p;
+            packageSelect.appendChild(opt);
         });
 
         // ชื่อสินค้า (จากโฟลเดอร์ชั้นในสุด)
@@ -220,6 +242,7 @@
         const campaign = document.getElementById('campaignFilter').value;
         const year = document.getElementById('yearFilter').value;
         const month = document.getElementById('monthFilter').value;
+        const pkg = document.getElementById('packageFilter').value;
 
         const filtered = allFiles.filter(f => {
             const nameMatch = f.name.toLowerCase().includes(term);
@@ -228,7 +251,8 @@
             const matchesCampaign = !campaign || f.campaign === campaign;
             const matchesYear = !year || String(f.year) === year;
             const matchesMonth = !month || String(f.month) === month;
-            return matchesTerm && matchesCampaign && matchesYear && matchesMonth;
+            const matchesPackage = !pkg || f.packageName === pkg;
+            return matchesTerm && matchesCampaign && matchesYear && matchesMonth && matchesPackage;
         });
         displayGrid(filtered);
     }
