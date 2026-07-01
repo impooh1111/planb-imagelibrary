@@ -18,12 +18,15 @@
         .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .content-title { font-size: 18px; font-weight: 600; color: #1e293b; }
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .image-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: transform 0.2s; }
+        .image-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: transform 0.2s; cursor: pointer; }
         .image-card:hover { transform: translateY(-4px); }
         .image-wrapper { width: 100%; height: 150px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         .image-info { padding: 12px; font-size: 13px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
         .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; color: #64748b; }
+        .empty-state button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .spinner { border: 3px solid #e2e8f0; border-top: 3px solid #3b82f6; border-radius: 50%; width: 32px; height: 32px; animation: spin 1s linear infinite; margin-bottom: 12px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -48,57 +51,44 @@
             </div>
             <div id="mainDisplay">
                 <div class="empty-state">
-                    <h3>🔄 กำลังดึงรูปภาพจากโฟลเดอร์กลาง...</h3>
-                    <p>กรุณารอสักครู่ ระบบกำลังเชื่อมต่อข้อมูลแบบสาธารณะ</p>
+                    <div class="spinner"></div>
+                    <p>กำลังดึงรูปภาพจากโฟลเดอร์กลาง...</p>
                 </div>
             </div>
         </div>
     </div>
 
 <script>
-    // ID โฟลเดอร์กลางที่คุณกำหนดไว้
-    const FOLDER_ID = '1TPF1Pv_fFHfc1NbgnCsS4yCn2Xz1LQBI';
+    // === ตั้งค่าตรงนี้ ===
+    // 1. ใส่ URL ของ Google Apps Script Web App ที่ deploy แล้ว (ดูวิธีทำใน README)
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgtRxRa9eUZHS-31AQ7JSCd3LaGIbDa3IawUZTzT64PK5hOd__RCO3-c_aCre_5HBgYA/exec';
+    // ====================
+
     let allFiles = [];
 
-    // ดึงรูปภาพผ่านบริการ Proxy สาธารณะเพื่อไม่ให้ต้องล็อกอินและปลอดภัยจาก API Key โดนขโมย
-    function loadPublicDriveImages() {
-        // ใช้ Script ของ Google Drive Proxy ดึงรายชื่อไฟล์รูปภาพในโฟลเดอร์สาธารณะ
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent('https://docs.google.com/api/v1/gdrive/folders/' + FOLDER_ID)}`;
-        
-        // สำหรับโปรเจกต์เว็บบน GitHub เราจะแปลงวิธีการดึงไฟล์ผ่าน Google Drive API สาธารณะแบบไม่ต้องระบุคีย์
-        // ค้นหาโดยอาศัยสิทธิ์การแชร์แบบ Anyone with link
-        fetch(`https://www.googleapis.com/drive/v3/files?q=trashed%3Dfalse+and+mimeType+contains+'image%2F'+and+'${FOLDER_ID}'+in+parents&key=AIzaSyA_NoKeyNeededForPublicAccess&fields=files(id,name)&pageSize=100`)
-        .then(res => {
-            // หาก API ปกติถูกจำกัดเนื่องจากไม่มี Key แท้ เราจะเปลี่ยนมาใช้การเข้าถึงหน้าเว็บวิวโดยตรงแทน
-            return fetch(`https://docs.google.com/api/v1/gdrive/folders/${FOLDER_ID}`)
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data && data.files) {
-                allFiles = data.files;
+    function loadImages() {
+        fetch(APPS_SCRIPT_URL)
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+            })
+            .then(data => {
+                allFiles = data;
                 displayGrid(allFiles);
-            } else {
-                // ตัวเลือกสำรอง: ใช้การ Fetch ดึงข้อมูลแบบโครงสร้างพิกัดโดยตรงจาก Google Drive Feed
-                fallbackLoad();
-            }
-        })
-        .catch(() => {
-            fallbackLoad();
-        });
+            })
+            .catch(err => {
+                console.error(err);
+                showSetupNotice();
+            });
     }
 
-    function fallbackLoad() {
-        // วิธีสำรองประสิทธิภาพสูง: ใช้ Google Apps Script Web App ของคลังข้อมูลสาธารณะ
-        // เพื่อดึงข้อมูลรูปภาพจากโฟลเดอร์ย่อย 'Empire, MBK 2025' และโฟลเดอร์หลักของคุณออกมาแสดงผลทันที
+    function showSetupNotice() {
         document.getElementById('mainDisplay').innerHTML = `
             <div class="empty-state">
-                <h3>📢 คำแนะนำการเชื่อมต่อ</h3>
-                <p>เนื่องจากเป็นคลังภาพระบบเปิดแบบไม่ต้องล็อกอิน เพื่อให้ระบบแสดงภาพได้อย่างถูกต้องถาวร</p>
-                <button onclick="window.open('https://drive.google.com/drive/folders/${FOLDER_ID}')" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;">
-                    👉 เปิดดูคลังรูปภาพโดยตรงบน Google Drive
-                </button>
+                <h3>⚙️ ยังไม่ได้เชื่อมต่อ Backend</h3>
+                <p>กรุณาตั้งค่า APPS_SCRIPT_URL ในไฟล์นี้ให้เป็น URL ของ Apps Script Web App<br>ที่ deploy จากโฟลเดอร์ Google Drive ของคุณ (ดูวิธีทำในคำแนะนำที่แนบมา)</p>
             </div>`;
-        document.getElementById('folderTitle').innerText = "คลังรูปภาพเปิด (Public)";
+        document.getElementById('folderTitle').innerText = "ยังไม่พร้อมใช้งาน";
     }
 
     function displayGrid(files) {
@@ -109,19 +99,19 @@
 
         let gridHtml = '<div class="grid-container">';
         files.forEach(file => {
-            // ดึงรูปแบบ Direct Link สำหรับรูปภาพที่แชร์สาธารณะในไดรฟ์
-            const imgSrc = `https://lh3.googleusercontent.com/d/${file.id}=s400`;
+            // ใช้ endpoint thumbnail ของ Drive ซึ่งโหลดตรงและไม่ขึ้นหน้ายืนยัน
+            const imgSrc = `https://drive.google.com/thumbnail?id=${file.id}&sz=w400`;
             gridHtml += `
-                <div class="image-card">
+                <div class="image-card" onclick="window.open('https://drive.google.com/file/d/${file.id}/view', '_blank')">
                     <div class="image-wrapper">
-                        <img src="${imgSrc}" alt="${file.name}" onerror="this.src='https://via.placeholder.com/150?text=Image+Locked'" loading="lazy">
+                        <img src="${imgSrc}" alt="${file.name}" loading="lazy">
                     </div>
                     <div class="image-info" title="${file.name}">${file.name}</div>
                 </div>
             `;
         });
         gridHtml += '</div>';
-        
+
         document.getElementById('mainDisplay').innerHTML = gridHtml;
         document.getElementById('folderTitle').innerText = `คลังรูปภาพทั้งหมดในโฟลเดอร์ (พบ ${files.length} รูป)`;
     }
@@ -132,8 +122,7 @@
         displayGrid(filtered);
     }
 
-    // สั่งโหลดรูปภาพทันทีที่เปิดเว็บขึ้นมาโดยไม่ต้องล็อกอิน
-    window.onload = loadPublicDriveImages;
+    window.onload = loadImages;
 </script>
 </body>
 </html>
