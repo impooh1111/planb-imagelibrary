@@ -11,7 +11,7 @@
         .logo { font-weight: bold; font-size: 18px; display: flex; align-items: center; gap: 5px; }
         .logo span { font-weight: normal; opacity: 0.7; }
         .main-container { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: 260px; background: white; border-right: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .sidebar { width: 260px; background: white; border-right: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
         .search-box input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
         .filter-select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; font-size: 14px; }
         .content { flex: 1; padding: 25px; overflow-y: auto; }
@@ -22,7 +22,9 @@
         .image-card:hover { transform: translateY(-4px); }
         .image-wrapper { width: 100%; height: 150px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-        .image-info { padding: 12px; font-size: 13px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+        .image-info { padding: 12px; }
+        .image-name { font-size: 13px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+        .image-campaign { font-size: 11px; color: #64748b; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; margin-top: 4px; }
         .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; color: #64748b; }
         .empty-state button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         .spinner { border: 3px solid #e2e8f0; border-top: 3px solid #3b82f6; border-radius: 50%; width: 32px; height: 32px; animation: spin 1s linear infinite; margin-bottom: 12px; }
@@ -40,9 +42,9 @@
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="ค้นหาชื่อรูปภาพ..." oninput="filterImages()">
             </div>
-            <select class="filter-select"><option>ทุกปี</option></select>
-            <select class="filter-select"><option>ทุก Campaign</option></select>
-            <select class="filter-select"><option>ทุกแบรนด์</option></select>
+            <select class="filter-select" id="campaignFilter" onchange="filterImages()">
+                <option value="">ทุก Campaign</option>
+            </select>
         </div>
 
         <div class="content">
@@ -60,7 +62,6 @@
 
 <script>
     // === ตั้งค่าตรงนี้ ===
-    // 1. ใส่ URL ของ Google Apps Script Web App ที่ deploy แล้ว (ดูวิธีทำใน README)
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgtRxRa9eUZHS-31AQ7JSCd3LaGIbDa3IawUZTzT64PK5hOd__RCO3-c_aCre_5HBgYA/exec';
     // ====================
 
@@ -74,12 +75,26 @@
             })
             .then(data => {
                 allFiles = data;
+                populateCampaignFilter(allFiles);
                 displayGrid(allFiles);
             })
             .catch(err => {
                 console.error(err);
                 showSetupNotice();
             });
+    }
+
+    function populateCampaignFilter(files) {
+        // ดึงชื่อ Campaign (โฟลเดอร์ชั้นในสุด) ที่ไม่ซ้ำกันมาใส่ dropdown
+        const campaigns = [...new Set(files.map(f => f.campaign).filter(Boolean))].sort();
+        const select = document.getElementById('campaignFilter');
+        select.innerHTML = '<option value="">ทุก Campaign (' + campaigns.length + ')</option>';
+        campaigns.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            select.appendChild(opt);
+        });
     }
 
     function showSetupNotice() {
@@ -94,19 +109,23 @@
     function displayGrid(files) {
         if (files.length === 0) {
             document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">📷 ไม่พบรูปภาพในโฟลเดอร์นี้</div>';
+            document.getElementById('folderTitle').innerText = "ไม่พบรูปภาพ";
             return;
         }
 
         let gridHtml = '<div class="grid-container">';
         files.forEach(file => {
-            // ใช้ endpoint thumbnail ของ Drive ซึ่งโหลดตรงและไม่ขึ้นหน้ายืนยัน
             const imgSrc = `https://drive.google.com/thumbnail?id=${file.id}&sz=w400`;
+            const campaignLabel = file.campaign ? file.campaign : '';
             gridHtml += `
                 <div class="image-card" onclick="window.open('https://drive.google.com/file/d/${file.id}/view', '_blank')">
                     <div class="image-wrapper">
                         <img src="${imgSrc}" alt="${file.name}" loading="lazy">
                     </div>
-                    <div class="image-info" title="${file.name}">${file.name}</div>
+                    <div class="image-info">
+                        <div class="image-name" title="${file.name}">${file.name}</div>
+                        <div class="image-campaign" title="${file.path || ''}">${campaignLabel}</div>
+                    </div>
                 </div>
             `;
         });
@@ -118,7 +137,13 @@
 
     function filterImages() {
         const term = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allFiles.filter(f => f.name.toLowerCase().includes(term));
+        const campaign = document.getElementById('campaignFilter').value;
+
+        const filtered = allFiles.filter(f => {
+            const matchesTerm = f.name.toLowerCase().includes(term);
+            const matchesCampaign = !campaign || f.campaign === campaign;
+            return matchesTerm && matchesCampaign;
+        });
         displayGrid(filtered);
     }
 
