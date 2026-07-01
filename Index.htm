@@ -24,7 +24,8 @@
         .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         .image-info { padding: 12px; }
         .image-name { font-size: 13px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-        .image-campaign { font-size: 11px; color: #64748b; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; margin-top: 4px; }
+        .image-campaign { font-size: 11px; color: #64748b; margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
+        .breadcrumb-tag { background: #eff6ff; color: #1e40af; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
         .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; color: #64748b; }
         .empty-state button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         .spinner { border: 3px solid #e2e8f0; border-top: 3px solid #3b82f6; border-radius: 50%; width: 32px; height: 32px; animation: spin 1s linear infinite; margin-bottom: 12px; }
@@ -40,7 +41,7 @@
     <div class="main-container">
         <div class="sidebar">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="ค้นหาชื่อรูปภาพ..." oninput="filterImages()">
+                <input type="text" id="searchInput" placeholder="ค้นหาชื่อรูปภาพ หรือชื่อโฟลเดอร์..." oninput="filterImages()">
             </div>
             <select class="filter-select" id="campaignFilter" onchange="filterImages()">
                 <option value="">ทุก Campaign</option>
@@ -116,7 +117,9 @@
         let gridHtml = '<div class="grid-container">';
         files.forEach(file => {
             const imgSrc = `https://drive.google.com/thumbnail?id=${file.id}&sz=w400`;
-            const campaignLabel = file.campaign ? file.campaign : '';
+            // แตก path เต็มเป็นชั้นๆ แล้วโชว์เป็น tag ทุกโฟลเดอร์ที่ไฟล์นี้อยู่ลึกลงไป
+            const pathParts = (file.path || file.campaign || '').split(' / ').filter(Boolean);
+            const breadcrumbHtml = pathParts.map(p => `<span class="breadcrumb-tag">${p}</span>`).join('');
             gridHtml += `
                 <div class="image-card" onclick="window.open('https://drive.google.com/file/d/${file.id}/view', '_blank')">
                     <div class="image-wrapper">
@@ -124,7 +127,7 @@
                     </div>
                     <div class="image-info">
                         <div class="image-name" title="${file.name}">${file.name}</div>
-                        <div class="image-campaign" title="${file.path || ''}">${campaignLabel}</div>
+                        <div class="image-campaign">${breadcrumbHtml}</div>
                     </div>
                 </div>
             `;
@@ -140,7 +143,9 @@
         const campaign = document.getElementById('campaignFilter').value;
 
         const filtered = allFiles.filter(f => {
-            const matchesTerm = f.name.toLowerCase().includes(term);
+            const nameMatch = f.name.toLowerCase().includes(term);
+            const pathMatch = (f.path || '').toLowerCase().includes(term);
+            const matchesTerm = nameMatch || pathMatch;
             const matchesCampaign = !campaign || f.campaign === campaign;
             return matchesTerm && matchesCampaign;
         });
