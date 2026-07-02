@@ -142,7 +142,7 @@
                     const pkg = extractPackage(f.path || f.campaign || '');
                     return { ...f, year: ym.year, month: ym.month, packageName: pkg };
                 });
-                populateFilters(allFiles);
+                updateFilterOptions();
                 displayGrid(allFiles);
             })
             .catch(err => {
@@ -151,50 +151,82 @@
             });
     }
 
-    function populateFilters(files) {
-        // ปี
-        const years = [...new Set(files.map(f => f.year).filter(Boolean))].sort((a, b) => a - b);
-        const yearSelect = document.getElementById('yearFilter');
-        yearSelect.innerHTML = '<option value="">ทุกปี</option>';
-        years.forEach(y => {
-            const opt = document.createElement('option');
-            opt.value = y;
-            opt.textContent = y;
-            yearSelect.appendChild(opt);
+    // คืนรายชื่อไฟล์ที่ผ่านทุกเงื่อนไข ยกเว้นเงื่อนไขของ dropdown ตัวที่ระบุ (excludeKey)
+    // ใช้สำหรับคำนวณว่า dropdown นั้นๆ ควรมีตัวเลือกอะไรบ้าง โดยไม่ถูกจำกัดด้วยค่าที่ตัวเองเลือกไว้
+    function getFilesForOptions(excludeKey) {
+        const term = document.getElementById('searchInput').value.toLowerCase();
+        const campaign = document.getElementById('campaignFilter').value;
+        const year = document.getElementById('yearFilter').value;
+        const month = document.getElementById('monthFilter').value;
+        const pkg = document.getElementById('packageFilter').value;
+
+        return allFiles.filter(f => {
+            const nameMatch = f.name.toLowerCase().includes(term);
+            const pathMatch = (f.path || '').toLowerCase().includes(term);
+            const matchesTerm = !term || nameMatch || pathMatch;
+            const matchesCampaign = excludeKey === 'campaign' || !campaign || f.campaign === campaign;
+            const matchesYear = excludeKey === 'year' || !year || String(f.year) === year;
+            const matchesMonth = excludeKey === 'month' || !month || String(f.month) === month;
+            const matchesPackage = excludeKey === 'package' || !pkg || f.packageName === pkg;
+            return matchesTerm && matchesCampaign && matchesYear && matchesMonth && matchesPackage;
         });
+    }
+
+    // เติมตัวเลือกใน <select> ใหม่ พร้อมพยายามคงค่าที่เลือกไว้เดิม ถ้ายังใช้ได้อยู่
+    function rebuildSelect(selectEl, values, allLabel, currentValue) {
+        selectEl.innerHTML = `<option value="">${allLabel}</option>`;
+        values.forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v.value;
+            opt.textContent = v.label;
+            selectEl.appendChild(opt);
+        });
+        // ถ้าค่าที่เคยเลือกไว้ยังอยู่ในตัวเลือกใหม่ ให้คงไว้ ไม่งั้นรีเซ็ตเป็น "ทั้งหมด"
+        if (currentValue && values.some(v => String(v.value) === currentValue)) {
+            selectEl.value = currentValue;
+        } else {
+            selectEl.value = '';
+        }
+    }
+
+    function updateFilterOptions() {
+        const yearSelect = document.getElementById('yearFilter');
+        const monthSelect = document.getElementById('monthFilter');
+        const packageSelect = document.getElementById('packageFilter');
+        const campaignSelect = document.getElementById('campaignFilter');
+
+        const prevYear = yearSelect.value;
+        const prevMonth = monthSelect.value;
+        const prevPackage = packageSelect.value;
+        const prevCampaign = campaignSelect.value;
+
+        // ปี: คำนวณจากไฟล์ที่ผ่านเงื่อนไขอื่นๆ (เดือน/สินค้า/Package/คำค้นหา) ยกเว้นปีเอง
+        const yearFiles = getFilesForOptions('year');
+        const years = [...new Set(yearFiles.map(f => f.year).filter(Boolean))]
+            .sort((a, b) => a - b)
+            .map(y => ({ value: y, label: String(y) }));
+        rebuildSelect(yearSelect, years, `ทุกปี (${years.length})`, prevYear);
 
         // เดือน
-        const months = [...new Set(files.map(f => f.month).filter(Boolean))].sort((a, b) => a - b);
-        const monthSelect = document.getElementById('monthFilter');
-        monthSelect.innerHTML = '<option value="">ทุกเดือน</option>';
-        months.forEach(m => {
-            const opt = document.createElement('option');
-            opt.value = m;
-            opt.textContent = MONTH_LABEL_TH[m];
-            monthSelect.appendChild(opt);
-        });
+        const monthFiles = getFilesForOptions('month');
+        const months = [...new Set(monthFiles.map(f => f.month).filter(Boolean))]
+            .sort((a, b) => a - b)
+            .map(m => ({ value: m, label: MONTH_LABEL_TH[m] }));
+        rebuildSelect(monthSelect, months, `ทุกเดือน (${months.length})`, prevMonth);
 
         // Package
-        const packages = [...new Set(files.map(f => f.packageName).filter(Boolean))].sort();
-        const packageSelect = document.getElementById('packageFilter');
-        packageSelect.innerHTML = '<option value="">ทุก Package (' + packages.length + ')</option>';
-        packages.forEach(p => {
-            const opt = document.createElement('option');
-            opt.value = p;
-            opt.textContent = p;
-            packageSelect.appendChild(opt);
-        });
+        const packageFiles = getFilesForOptions('package');
+        const packages = [...new Set(packageFiles.map(f => f.packageName).filter(Boolean))]
+            .sort()
+            .map(p => ({ value: p, label: p }));
+        rebuildSelect(packageSelect, packages, `ทุก Package (${packages.length})`, prevPackage);
 
-        // ชื่อสินค้า (จากโฟลเดอร์ชั้นในสุด)
-        const campaigns = [...new Set(files.map(f => f.campaign).filter(Boolean))].sort();
-        const campaignSelect = document.getElementById('campaignFilter');
-        campaignSelect.innerHTML = '<option value="">ทุกสินค้า (' + campaigns.length + ')</option>';
-        campaigns.forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c;
-            opt.textContent = c;
-            campaignSelect.appendChild(opt);
-        });
+        // ชื่อสินค้า
+        const campaignFiles = getFilesForOptions('campaign');
+        const campaigns = [...new Set(campaignFiles.map(f => f.campaign).filter(Boolean))]
+            .sort()
+            .map(c => ({ value: c, label: c }));
+        rebuildSelect(campaignSelect, campaigns, `ทุกสินค้า (${campaigns.length})`, prevCampaign);
     }
 
     function showSetupNotice() {
@@ -255,6 +287,7 @@
             return matchesTerm && matchesCampaign && matchesYear && matchesMonth && matchesPackage;
         });
         displayGrid(filtered);
+        updateFilterOptions();
     }
 
     window.onload = loadImages;
