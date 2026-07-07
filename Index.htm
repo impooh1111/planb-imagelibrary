@@ -4,293 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PLANB / Image Library</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; font-family: 'Helvetica Neue', Arial, sans-serif; }
-        body { margin: 0; background-color: #f8fafc; color: #334155; display: flex; flex-direction: column; height: 100vh; }
-        .navbar { background-color: #1e40af; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .logo { font-weight: bold; font-size: 18px; display: flex; align-items: center; gap: 5px; }
-        .logo span { font-weight: normal; opacity: 0.7; }
-        .main-container { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: 260px; background: white; border-right: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
-        .search-box input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
-        .filter-select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; font-size: 14px; }
-        .content { flex: 1; padding: 25px; overflow-y: auto; }
-        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .content-title { font-size: 18px; font-weight: 600; color: #1e293b; }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .image-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: transform 0.2s; cursor: pointer; }
-        .image-card:hover { transform: translateY(-4px); }
-        .image-wrapper { width: 100%; height: 150px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-        .image-info { padding: 12px; }
-        .image-name { font-size: 13px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-        .image-campaign { font-size: 11px; color: #64748b; margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
-        .breadcrumb-tag { background: #eff6ff; color: #1e40af; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
-        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; color: #64748b; }
-        .empty-state button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        .spinner { border: 3px solid #e2e8f0; border-top: 3px solid #3b82f6; border-radius: 50%; width: 32px; height: 32px; animation: spin 1s linear infinite; margin-bottom: 12px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Sarabun', sans-serif; }
     </style>
 </head>
-<body>
+<body class="min-h-screen bg-gray-50 text-gray-800">
 
-    <div class="navbar">
-        <div class="logo">● PLANB <span>/ Image Library</span></div>
-    </div>
-
-    <div class="main-container">
-        <div class="sidebar">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="ค้นหาชื่อรูปภาพ หรือชื่อโฟลเดอร์..." oninput="filterImages()">
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-md shadow-blue-100">
+                    <i class="fa-solid fa-images text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-gray-900">PLANB</h1>
+                    <p class="text-xs text-gray-500 font-medium tracking-wide uppercase">Image Library คลังรูปภาพกลาง</p>
+                </div>
             </div>
-            <select class="filter-select" id="yearFilter" onchange="filterImages()">
-                <option value="">ทุกปี</option>
-            </select>
-            <select class="filter-select" id="monthFilter" onchange="filterImages()">
-                <option value="">ทุกเดือน</option>
-            </select>
-            <select class="filter-select" id="packageFilter" onchange="filterImages()">
-                <option value="">ทุก Package</option>
-            </select>
-            <select class="filter-select" id="campaignFilter" onchange="filterImages()">
-                <option value="">ทุกสินค้า</option>
-            </select>
+            
+            <div class="relative w-full sm:w-80">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                </span>
+                <input type="text" id="search-input" placeholder="ค้นหาชื่อรูปภาพหรือสินค้า..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all bg-gray-50 focus:bg-white">
+            </div>
         </div>
+    </header>
 
-        <div class="content">
-            <div class="content-header">
-                <div class="content-title" id="folderTitle">กำลังโหลดคลังรูปภาพ...</div>
+    <section class="max-w-7xl mx-auto px-4 py-6">
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-150 flex flex-col md:flex-row gap-4 items-start md:items-center">
+            <div class="flex items-center gap-2 text-sm font-semibold text-gray-700 whitespace-nowrap">
+                <i class="fa-solid fa-sliders text-blue-600"></i>
+                <span>ตัวกรองรูปภาพ:</span>
             </div>
-            <div id="mainDisplay">
-                <div class="empty-state">
-                    <div class="spinner"></div>
-                    <p>กำลังดึงรูปภาพจากโฟลเดอร์กลาง...</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
+                <div>
+                    <select id="filter-year" class="w-full bg-gray-50 border border-gray-300 text-gray-700 py-2 px-3 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none cursor-pointer">
+                        <option value="all">📅 ทุกปี</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="filter-month" class="w-full bg-gray-50 border border-gray-300 text-gray-700 py-2 px-3 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none cursor-pointer">
+                        <option value="all">🌙 ทุกเดือน</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="filter-package" class="w-full bg-gray-50 border border-gray-300 text-gray-700 py-2 px-3 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none cursor-pointer">
+                        <option value="all">📦 ทุก Package</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="filter-product" class="w-full bg-gray-50 border border-gray-300 text-gray-700 py-2 px-3 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none cursor-pointer">
+                        <option value="all">🏷️ ทุกสินค้า</option>
+                    </select>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-<script>
-    // === ตั้งค่าตรงนี้ ===
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgtRxRa9eUZHS-31AQ7JSCd3LaGIbDa3IawUZTzT64PK5hOd__RCO3-c_aCre_5HBgYA/exec';
-    // ====================
-
-    let allFiles = [];
-
-    const THAI_MONTHS = {
-        'มกราคม': 1, 'กุมภาพันธ์': 2, 'มีนาคม': 3, 'เมษายน': 4,
-        'พฤษภาคม': 5, 'มิถุนายน': 6, 'กรกฎาคม': 7, 'สิงหาคม': 8,
-        'กันยายน': 9, 'ตุลาคม': 10, 'พฤศจิกายน': 11, 'ธันวาคม': 12
-    };
-    const ENG_MONTHS = { jan:1, feb:2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9, oct:10, nov:11, dec:12 };
-    const MONTH_LABEL_TH = ['', 'มกราคม (Jan)', 'กุมภาพันธ์ (Feb)', 'มีนาคม (Mar)', 'เมษายน (Apr)', 'พฤษภาคม (May)', 'มิถุนายน (Jun)', 'กรกฎาคม (Jul)', 'สิงหาคม (Aug)', 'กันยายน (Sep)', 'ตุลาคม (Oct)', 'พฤศจิกายน (Nov)', 'ธันวาคม (Dec)'];
-
-    // แกะปี/เดือนออกจาก path เต็มของไฟล์ (รองรับชื่อโฟลเดอร์แบบไทยและอังกฤษ)
-    function extractYearMonth(pathStr) {
-        let year = null, month = null;
-        if (!pathStr) return { year, month };
-
-        // 1) หาเดือนแบบไทย พร้อมปี พ.ศ. แบบย่อ (เช่น "กันยายน 68" -> 2568 พ.ศ. = 2025 ค.ศ.)
-        for (const name in THAI_MONTHS) {
-            if (pathStr.includes(name)) {
-                month = THAI_MONTHS[name];
-                const re = new RegExp(name + '\\s*(\\d{2})');
-                const m = pathStr.match(re);
-                if (m) year = 1957 + parseInt(m[1], 10);
-                break;
-            }
-        }
-
-        // 2) ถ้ายังไม่เจอ ลองหาเดือนแบบอังกฤษย่อ พร้อมปี (เช่น "1 Sep 25" -> 2025)
-        if (!month) {
-            const re = /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*(\d{2,4})\b/i;
-            const m = pathStr.match(re);
-            if (m) {
-                month = ENG_MONTHS[m[1].toLowerCase()];
-                let y = parseInt(m[2], 10);
-                if (y < 100) y = 2000 + y;
-                year = y;
-            }
-        }
-
-        // 3) ถ้ายังไม่เจอปี ลองหาเลขปี ค.ศ. 4 หลักตรงๆ ในชื่อโฟลเดอร์ (เช่น "Empire, MBK 2025")
-        if (!year) {
-            const ym = pathStr.match(/\b(20\d{2})\b/);
-            if (ym) year = parseInt(ym[1], 10);
-        }
-
-        return { year, month };
-    }
-
-    // แกะชื่อ Package จาก path (โฟลเดอร์ที่ขึ้นต้นด้วย "Pic Retouch @ ")
-    function extractPackage(pathStr) {
-        if (!pathStr) return null;
-        const m = pathStr.match(/Pic Retouch\s*@\s*([^\/]+)/i);
-        return m ? m[1].trim() : null;
-    }
-
-    function loadImages() {
-        fetch(APPS_SCRIPT_URL)
-            .then(res => {
-                if (!res.ok) throw new Error('Network response was not ok');
-                return res.json();
-            })
-            .then(data => {
-                // คำนวณปี/เดือนให้แต่ละไฟล์จาก path
-                allFiles = data.map(f => {
-                    const ym = extractYearMonth(f.path || f.campaign || '');
-                    const pkg = extractPackage(f.path || f.campaign || '');
-                    return { ...f, year: ym.year, month: ym.month, packageName: pkg };
-                });
-                updateFilterOptions();
-                displayGrid(allFiles);
-            })
-            .catch(err => {
-                console.error(err);
-                showSetupNotice();
-            });
-    }
-
-    // คืนรายชื่อไฟล์ที่ผ่านทุกเงื่อนไข ยกเว้นเงื่อนไขของ dropdown ตัวที่ระบุ (excludeKey)
-    // ใช้สำหรับคำนวณว่า dropdown นั้นๆ ควรมีตัวเลือกอะไรบ้าง โดยไม่ถูกจำกัดด้วยค่าที่ตัวเองเลือกไว้
-    function getFilesForOptions(excludeKey) {
-        const term = document.getElementById('searchInput').value.toLowerCase();
-        const campaign = document.getElementById('campaignFilter').value;
-        const year = document.getElementById('yearFilter').value;
-        const month = document.getElementById('monthFilter').value;
-        const pkg = document.getElementById('packageFilter').value;
-
-        return allFiles.filter(f => {
-            const nameMatch = f.name.toLowerCase().includes(term);
-            const pathMatch = (f.path || '').toLowerCase().includes(term);
-            const matchesTerm = !term || nameMatch || pathMatch;
-            const matchesCampaign = excludeKey === 'campaign' || !campaign || f.campaign === campaign;
-            const matchesYear = excludeKey === 'year' || !year || String(f.year) === year;
-            const matchesMonth = excludeKey === 'month' || !month || String(f.month) === month;
-            const matchesPackage = excludeKey === 'package' || !pkg || f.packageName === pkg;
-            return matchesTerm && matchesCampaign && matchesYear && matchesMonth && matchesPackage;
-        });
-    }
-
-    // เติมตัวเลือกใน <select> ใหม่ พร้อมพยายามคงค่าที่เลือกไว้เดิม ถ้ายังใช้ได้อยู่
-    function rebuildSelect(selectEl, values, allLabel, currentValue) {
-        selectEl.innerHTML = `<option value="">${allLabel}</option>`;
-        values.forEach(v => {
-            const opt = document.createElement('option');
-            opt.value = v.value;
-            opt.textContent = v.label;
-            selectEl.appendChild(opt);
-        });
-        // ถ้าค่าที่เคยเลือกไว้ยังอยู่ในตัวเลือกใหม่ ให้คงไว้ ไม่งั้นรีเซ็ตเป็น "ทั้งหมด"
-        if (currentValue && values.some(v => String(v.value) === currentValue)) {
-            selectEl.value = currentValue;
-        } else {
-            selectEl.value = '';
-        }
-    }
-
-    function updateFilterOptions() {
-        const yearSelect = document.getElementById('yearFilter');
-        const monthSelect = document.getElementById('monthFilter');
-        const packageSelect = document.getElementById('packageFilter');
-        const campaignSelect = document.getElementById('campaignFilter');
-
-        const prevYear = yearSelect.value;
-        const prevMonth = monthSelect.value;
-        const prevPackage = packageSelect.value;
-        const prevCampaign = campaignSelect.value;
-
-        // ปี: คำนวณจากไฟล์ที่ผ่านเงื่อนไขอื่นๆ (เดือน/สินค้า/Package/คำค้นหา) ยกเว้นปีเอง
-        const yearFiles = getFilesForOptions('year');
-        const years = [...new Set(yearFiles.map(f => f.year).filter(Boolean))]
-            .sort((a, b) => a - b)
-            .map(y => ({ value: y, label: String(y) }));
-        rebuildSelect(yearSelect, years, `ทุกปี (${years.length})`, prevYear);
-
-        // เดือน
-        const monthFiles = getFilesForOptions('month');
-        const months = [...new Set(monthFiles.map(f => f.month).filter(Boolean))]
-            .sort((a, b) => a - b)
-            .map(m => ({ value: m, label: MONTH_LABEL_TH[m] }));
-        rebuildSelect(monthSelect, months, `ทุกเดือน (${months.length})`, prevMonth);
-
-        // Package
-        const packageFiles = getFilesForOptions('package');
-        const packages = [...new Set(packageFiles.map(f => f.packageName).filter(Boolean))]
-            .sort()
-            .map(p => ({ value: p, label: p }));
-        rebuildSelect(packageSelect, packages, `ทุก Package (${packages.length})`, prevPackage);
-
-        // ชื่อสินค้า
-        const campaignFiles = getFilesForOptions('campaign');
-        const campaigns = [...new Set(campaignFiles.map(f => f.campaign).filter(Boolean))]
-            .sort()
-            .map(c => ({ value: c, label: c }));
-        rebuildSelect(campaignSelect, campaigns, `ทุกสินค้า (${campaigns.length})`, prevCampaign);
-    }
-
-    function showSetupNotice() {
-        document.getElementById('mainDisplay').innerHTML = `
-            <div class="empty-state">
-                <h3>⚙️ ยังไม่ได้เชื่อมต่อ Backend</h3>
-                <p>กรุณาตั้งค่า APPS_SCRIPT_URL ในไฟล์นี้ให้เป็น URL ของ Apps Script Web App<br>ที่ deploy จากโฟลเดอร์ Google Drive ของคุณ (ดูวิธีทำในคำแนะนำที่แนบมา)</p>
-            </div>`;
-        document.getElementById('folderTitle').innerText = "ยังไม่พร้อมใช้งาน";
-    }
-
-    function displayGrid(files) {
-        if (files.length === 0) {
-            document.getElementById('mainDisplay').innerHTML = '<div class="empty-state">📷 ไม่พบรูปภาพในโฟลเดอร์นี้</div>';
-            document.getElementById('folderTitle').innerText = "ไม่พบรูปภาพ";
-            return;
-        }
-
-        let gridHtml = '<div class="grid-container">';
-        files.forEach(file => {
-            const imgSrc = `https://drive.google.com/thumbnail?id=${file.id}&sz=w400`;
-            // แตก path เต็มเป็นชั้นๆ แล้วโชว์เป็น tag ทุกโฟลเดอร์ที่ไฟล์นี้อยู่ลึกลงไป
-            const pathParts = (file.path || file.campaign || '').split(' / ').filter(Boolean);
-            const breadcrumbHtml = pathParts.map(p => `<span class="breadcrumb-tag">${p}</span>`).join('');
-            gridHtml += `
-                <div class="image-card" onclick="window.open('https://drive.google.com/file/d/${file.id}/view', '_blank')">
-                    <div class="image-wrapper">
-                        <img src="${imgSrc}" alt="${file.name}" loading="lazy">
-                    </div>
-                    <div class="image-info">
-                        <div class="image-name" title="${file.name}">${file.name}</div>
-                        <div class="image-campaign">${breadcrumbHtml}</div>
-                    </div>
+    <main class="max-w-7xl mx-auto px-4 pb-16">
+        
+        <div id="loading-state" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 animate-pulse">
+            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                <div class="bg-gray-200 aspect-[4/3] w-full"></div>
+                <div class="p-4 space-y-2.5">
+                    <div class="h-4 bg-gray-200 rounded-md w-3/4"></div>
+                    <div class="h-3 bg-gray-200 rounded-md w-1/2"></div>
                 </div>
-            `;
-        });
-        gridHtml += '</div>';
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                <div class="bg-gray-200 aspect-[4/3] w-full"></div>
+                <div class="p-4 space-y-2.5">
+                    <div class="h-4 bg-gray-200 rounded-md w-3/4"></div>
+                    <div class="h-3 bg-gray-200 rounded-md w-1/2"></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                <div class="bg-gray-200 aspect-[4/3] w-full"></div>
+                <div class="p-4 space-y-2.5">
+                    <div class="h-4 bg-gray-200 rounded-md w-3/4"></div>
+                    <div class="h-3 bg-gray-200 rounded-md w-1/2"></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                <div class="bg-gray-200 aspect-[4/3] w-full"></div>
+                <div class="p-4 space-y-2.5">
+                    <div class="h-4 bg-gray-200 rounded-md w-3/4"></div>
+                    <div class="h-3 bg-gray-200 rounded-md w-1/2"></div>
+                </div>
+            </div>
+        </div>
 
-        document.getElementById('mainDisplay').innerHTML = gridHtml;
-        document.getElementById('folderTitle').innerText = `คลังรูปภาพทั้งหมดในโฟลเดอร์ (พบ ${files.length} รูป)`;
-    }
-
-    function filterImages() {
-        const term = document.getElementById('searchInput').value.toLowerCase();
-        const campaign = document.getElementById('campaignFilter').value;
-        const year = document.getElementById('yearFilter').value;
-        const month = document.getElementById('monthFilter').value;
-        const pkg = document.getElementById('packageFilter').value;
-
-        const filtered = allFiles.filter(f => {
-            const nameMatch = f.name.toLowerCase().includes(term);
-            const pathMatch = (f.path || '').toLowerCase().includes(term);
-            const matchesTerm = nameMatch || pathMatch;
-            const matchesCampaign = !campaign || f.campaign === campaign;
-            const matchesYear = !year || String(f.year) === year;
-            const matchesMonth = !month || String(f.month) === month;
-            const matchesPackage = !pkg || f.packageName === pkg;
-            return matchesTerm && matchesCampaign && matchesYear && matchesMonth && matchesPackage;
-        });
-        displayGrid(filtered);
-        updateFilterOptions();
-    }
-
-    window.onload = loadImages;
-</script>
-</body>
-</html>
+        <div id="image-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 hidden">
