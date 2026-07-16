@@ -376,7 +376,7 @@
             // ขอ thumbnail ขนาดเล็กพอดีกับการ์ด (เร็วกว่าดึงไฟล์เต็ม) แล้วค่อยขยายผ่าน CSS
             const imgSrc = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`;
             const pathParts = (file.path || file.campaign || '').split(' / ').filter(Boolean);
-            const breadcrumbHtml = pathParts.map(p => `<span class="label-uppercase px-2 py-0.5 border" style="border-color:var(--hairline); color:var(--muted); font-size:10px; letter-spacing:1px;">${p}</span>`).join('');
+            const breadcrumbHtml = pathParts.map(p => `<span class="label-uppercase px-2 py-0.5 border" style="border-color:var(--hairline); color:#ffffff; font-size:10px; letter-spacing:1px;">${p}</span>`).join('');
             gridHtml += `
                 <div class="image-card surface-card overflow-hidden" onclick="window.open('https://drive.google.com/file/d/${file.id}/view', '_blank')">
                     <div class="w-full aspect-[4/3] overflow-hidden surface-soft">
